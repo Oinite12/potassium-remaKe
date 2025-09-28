@@ -1,0 +1,4 @@
+G.C.BANAN1 = HEX('f5d953')
+G.C.BANAN2 = HEX('9be344')
+G.C.GLOP = HEX('11ff11')
+G.C.UI_GLOP = G.C.GLOP
