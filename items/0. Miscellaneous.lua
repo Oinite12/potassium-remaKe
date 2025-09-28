@@ -125,7 +125,48 @@ SMODS.Scoring_Parameter {
 
     calculation_keys = {'glop', 'xglop', 'eglop'},
     calc_effect = function (self, effect, scored_card, key, amount, from_edition)
-        
+        if not amount then return end
+
+        if effect.card and effect.card ~= scored_card then juice_card(effect.card) end
+
+        if key == 'glop' then
+            self:modify(amount)
+            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
+                message = localize{
+                    type = 'variable',
+                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
+                    vars = {number_format(amount)}
+                },
+                colour = self.colour
+            })
+            return true
+        end
+
+        if key == 'xglop' then
+            self:modify(self.current*(amount - 1))
+            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
+                message = localize{
+                    type = 'variable',
+                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
+                    vars = {'X'..number_format(amount)}
+                },
+                colour = self.colour
+            })
+            return true
+        end
+
+        if key == 'eglop' then
+            self:modify(self.current^amount - self.current)
+            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
+                message = localize{
+                    type = 'variable',
+                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
+                    vars = {'^'..number_format(amount)}
+                },
+                colour = self.colour
+            })
+            return true
+        end
     end
 }
 
