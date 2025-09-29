@@ -14,7 +14,43 @@ SMODS.Edition {
     },
 
     calculate = function (self, card, context)
-        -- todo: implement glop scoring parameter
+        if (
+            context.post_trigger
+            and context.other_card == card
+            and context.other_ret -- "other return"
+        ) then
+            local calc_keys = Potassium.calc_keys
+            local increased = false
+            local glop = 0
+            local xglop = 1
+            local eglop = 1
+
+            for _,something in pairs(context.other_ret) do
+                for return_key, value in pairs(something) do
+                    if calc_keys.additive[return_key] then
+                        -- Get value's closest power of 10, add 1
+                        local reduced_value = value/10^(math.floor(math.log(tonumber(value), 10))+1)
+                        glop = glop + reduced_value
+                        increased = true
+                    elseif calc_keys.multiplicative[return_key] then
+                        glop = glop + value
+                        increased = true
+                    elseif calc_keys.exponential[return_key] then
+                        xglop = xglop*value
+                        increased = true
+                    elseif calc_keys.hyperoperative[return_key] then
+                        eglop = eglop*value
+                        increased = true
+                    end
+                end
+            end
+
+            if increased then return {
+                glop = glop,
+                xglop = xglop,
+                eglop = eglop
+            } end
+        end
     end
 }
 
@@ -31,7 +67,33 @@ SMODS.Tag {
     in_pool = function () return false end,
 
     apply = function (self, tag, context)
-        -- todo: implement glop
+        if context.type == "tag_add" and context.tag.key ~= "tag_kali_glop" then
+            local lock = tag.ID
+            G.CONTROLLER.locks[lock] = true
+            tag:yep('+', G.C.BLUE,function()
+                if context.tag.ability and context.tag.ability.orbital_hand then
+                    G.orbital_hand = context.tag.ability.orbital_hand
+                end
+                add_tag(Tag(context.tag.key))
+                G.orbital_hand = nil
+                G.CONTROLLER.locks[lock] = nil
+                return true
+            end)
+            tag.triggered = true
+        end
+
+        if context.type == "scoring" then
+            -- identical to calc_effect down at glop scoring param
+            SMODS.Scoring_Parameters.kali_glop:modify(0.5)
+            card_eval_status_text(tag.HUD_tag, 'extra', nil, nil, nil, {
+                message = localize{
+                    type = 'variable',
+                    key = 'a_chips',
+                    vars = {number_format(0.5)}
+                },
+                colour = self.colour
+            })
+        end
     end
 }
 
@@ -40,13 +102,13 @@ SMODS.Tag {
 -- Banana
 ----------
 SMODS.Sticker {
-    key = "banana",
+    key = "stickernana",
     badge_colour = HEX("e8c500"),
     loc_vars = function(self, info_queue, card)
         local numerator, denominator = SMODS.get_probability_vars(card, 1, 10, 'stickernana')
-        local key
+        local key = "kali_stickernana"
         if card.ability.set ~= "Joker" then
-            key = "banana_playing_card"
+            key = "kali_stickernana_playing_card"
         end
         return {
             key = key,
@@ -68,7 +130,7 @@ SMODS.Sticker {
                 or area == G.shop_jokers
             )
             and card.ability.set == "Joker"
-            and G.GAME.modifiers.enable_banana
+            and G.GAME.modifiers.enable_stickernana
         )
     end,
     rate = 0.3,
@@ -81,7 +143,7 @@ SMODS.Sticker {
             and not context.individual
         ) then
             if card.ability.set == "Joker" then
-                return card:calculate_banana()
+                return card:calculate_stickernana()
             end
         end
 
@@ -90,7 +152,7 @@ SMODS.Sticker {
             and context.destroying_card
             and context.destroy_card == card
         ) then
-            return card:calculate_banana()
+            return card:calculate_stickernana()
         end
     end
 }
@@ -129,7 +191,7 @@ SMODS.Scoring_Parameter {
 
         if effect.card and effect.card ~= scored_card then juice_card(effect.card) end
 
-        if key == 'glop' then
+        if key == 'glop' and amount ~= 0 then
             self:modify(amount)
             card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
                 message = localize{
@@ -137,12 +199,13 @@ SMODS.Scoring_Parameter {
                     key = amount > 0 and 'a_chips' or 'a_chips_minus',
                     vars = {number_format(amount)}
                 },
-                colour = self.colour
+                colour = self.colour,
+                sound = 'kali_glop'
             })
             return true
         end
 
-        if key == 'xglop' then
+        if key == 'xglop' and amount ~= 1 then
             self:modify(self.current*(amount - 1))
             card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
                 message = localize{
@@ -150,12 +213,13 @@ SMODS.Scoring_Parameter {
                     key = amount > 0 and 'a_chips' or 'a_chips_minus',
                     vars = {'X'..number_format(amount)}
                 },
-                colour = self.colour
+                colour = self.colour,
+                sound = 'kali_glop'
             })
             return true
         end
 
-        if key == 'eglop' then
+        if key == 'eglop' and amount ~= 1 then
             self:modify(self.current^amount - self.current)
             card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
                 message = localize{
@@ -163,7 +227,8 @@ SMODS.Scoring_Parameter {
                     key = amount > 0 and 'a_chips' or 'a_chips_minus',
                     vars = {'^'..number_format(amount)}
                 },
-                colour = self.colour
+                colour = self.colour,
+                sound = 'kali_glop'
             })
             return true
         end
@@ -189,7 +254,8 @@ SMODS.Scoring_Calculation {
 					type = 'chips',
 					text = 'chip_text',
 					align = 'cr',
-					w = 1.1,
+					w = 1.3,
+                    h = 0.7,
 					scale = scale
 				})
 			}},
@@ -198,7 +264,8 @@ SMODS.Scoring_Calculation {
 				SMODS.GUI.score_container({
 					type = 'mult',
 					align = 'cm',
-					w = 1.1,
+					w = 1.3,
+                    h = 0.7,
 					scale = scale
 				})
 			}},
@@ -207,7 +274,8 @@ SMODS.Scoring_Calculation {
 				SMODS.GUI.score_container({
 					type = 'kali_glop',
 					align = 'cl',
-					w = 1.1,
+					w = 1.3,
+                    h = 0.7,
 					scale = scale
 				})
 			}},

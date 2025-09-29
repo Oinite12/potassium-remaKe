@@ -48,16 +48,49 @@ return {
                 },
             }
         },
+		Edition = {
+			e_kali_glop = {
+				name = "Glop",
+				text = {
+					"Scoring effects",
+					"also give {C:glop}Glop"
+				}
+			}
+		},
+		Tag = {
+			tag_kali_glop = {
+				name = "Glop Tag",
+				text = {
+					"{C:glop}+0.5{} Glop",
+                    "Gives a copy of the",
+                    "next selected {C:attention}Tag{}",
+                    "{s:0.8,C:glop}Glop Tag{s:0.8} excluded",
+				}
+			}
+		},
         Other = {
             -- Sticker
-            kali_banana = {
+            kali_stickernana = {
                 name = "Banana",
                 text = {
                     "{C:green}#1# in #2#{} chance this",
                     "card is destroyed",
                     "at end of round",
                 }
-            }
+            },
+			kali_stickernana_playing_card = {
+				name = "Banana",
+				text = {
+					"{C:green}#1# in #2#{} chance",
+					"to destroy card",
+				},
+			}
+        }
+    },
+    misc = {
+        labels = {
+            kali_stickernana = "Banana",
+            e_kali_glop = "Glop"
         }
     }
 }

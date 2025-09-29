@@ -23,7 +23,7 @@ SMODS.Consumable {
         local numerator, denominator = SMODS.get_probability_vars(card, 1, 10, 'stickernana')
         table.insert(info_queue, {
             set = "Other",
-            key = "kali_banana",
+            key = "kali_stickernana",
             vars = {numerator, denominator}
         })
     end,
@@ -34,7 +34,7 @@ SMODS.Consumable {
     can_use = function(self, card)
         for held_joker in ipairs(G.jokers.cards) do
             if not (
-                held_joker.ability.kali_banana
+                held_joker.ability.kali_stickernana
                 or held_joker.ability.eternal
             ) then return true end
         end
@@ -45,7 +45,7 @@ SMODS.Consumable {
         local eligible_jokers = {}
         for held_joker in ipairs(G.jokers.cards) do
             if not (
-                held_joker.ability.kali_banana
+                held_joker.ability.kali_stickernana
                 or held_joker.ability.eternal
             ) then table.insert(eligible_jokers, held_joker) end
         end
@@ -64,7 +64,7 @@ SMODS.Consumable {
         if select_joker_evo then
             select_joker:set_ability(G.P_CENTERS[select_joker_evo])
         else
-            select_joker:set_banana(true)
+            select_joker:set_stickernana(true)
         end
     end,
 }
