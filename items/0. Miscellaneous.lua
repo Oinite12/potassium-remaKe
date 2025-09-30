@@ -28,7 +28,7 @@ SMODS.Edition {
             for _,something in pairs(context.other_ret) do
                 for return_key, value in pairs(something) do
                     if calc_keys.additive[return_key] then
-                        -- Get value's closest power of 10, add 1
+                        -- "Normalize" value to coefficient (scientific notation)
                         local reduced_value = value/10^(math.floor(math.log(tonumber(value), 10))+1)
                         glop = glop + reduced_value
                         increased = true
@@ -176,14 +176,82 @@ SMODS.Stake {
     end,
 }
 
+------------------
+-- POKER HAND PART
+-- Virgin Bouquet
+------------------
+SMODS.PokerHandPart {
+    key = "virgin_bouquet",
+    func = function (hand)
+        if #hand < 4 then return {} end
+
+        local track_ranks = {}
+
+        for _,card in ipairs(hand) do
+            local rank = card:get_id()
+            track_ranks[rank] = track_ranks[rank] or {}
+            table.insert(track_ranks[rank], card)
+        end
+
+        if not (
+            -- A rank is not tracked if the rank is not in the hand
+            track_ranks[12]     -- queens
+            and track_ranks[11] -- jacks
+            and track_ranks[10] -- 10s
+            and track_ranks[2]  -- ok come on, what do you think
+        ) then return {} end
+
+        local scoring_cards = SMODS.merge_lists{
+            track_ranks[12],
+            track_ranks[11],
+            track_ranks[10],
+            track_ranks[2]
+        }
+
+        return {scoring_cards}
+    end
+}
+
+-----------------
+-- POKER HAND
+-- Virgin Bouquet
+-----------------
+SMODS.PokerHand {
+    key = "virgin_bouquet",
+    chips   = 20, mult   = 4, kali_glop   = 2,
+    l_chips = 15, l_mult = 1, l_kali_glop = 0.2,
+
+    visible = false,
+    example = {
+        {'S_Q',  true },
+        {'H_J',  true },
+        {'C_T', true },
+        {'D_2',  true },
+        {'S_7',  false}
+    },
+
+    evaluate = function (parts, hand)
+        return parts.kali_virgin_bouquet
+    end,
+}
+
 --------------------
 -- SCORING PARAMETER
 -- Glop
 --------------------
 SMODS.Scoring_Parameter {
     key = 'glop',
-    default_value = 1,
+    default_value = 0,
     colour = G.C.UI_GLOP,
+
+    -- glop values for all hands added in func/post-load.lua
+    hands = {
+        -- Note that Potassium has "x_kali_glop", parameter for holding non-level Glop
+    },
+    level_up_hand = function (self, amount, hand)
+        local new_kali_glop = hand.s_kali_glop + hand.l_kali_glop*(hand.level - 1) + hand.kali_extra_glop
+        hand.kali_glop = math.max(new_kali_glop, 0)
+    end,
 
     calculation_keys = {'glop', 'xglop', 'eglop'},
     calc_effect = function (self, effect, scored_card, key, amount, from_edition)
@@ -241,7 +309,7 @@ SMODS.Scoring_Parameter {
 ----------------------
 SMODS.Scoring_Calculation {
     key = 'glop',
-    parameters = {'chips', 'mult', 'kali_glop'},
+    parameters = {'mult', 'chips', 'kali_glop'},
     func = function (self, chips, mult, flames) --[[@overload fun(self, chips, mult, flames): number]]
         return chips * mult * SMODS.get_scoring_parameter('kali_glop', flames)
     end,

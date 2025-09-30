@@ -15,3 +15,22 @@ for i = 1, #G.GAME.tags do
     G.GAME.tags[i]:apply_to_run({type = 'scoring'})
 end'''
 match_indent = true
+
+# multi-target (anything that upgrades hands)
+# Reset other scoring parameters after leveling up hands
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})'''
+position = "after"
+payload = '''
+local reset_other_handtxt = {}
+local current_scoring_params = Glop_f.current_scoring_calculation().parameters
+for _,name in ipairs(current_scoring_params) do
+    if name ~= 'mult' or name ~= 'chips' then
+        reset_other_handtxt[name] = SMODS.Scoring_Parameters[name].default_value
+    end
+end
+update_hand_text({delay = 0}, reset_other_handtxt)
+'''
+match_indent = true

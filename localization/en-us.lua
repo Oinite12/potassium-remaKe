@@ -3,6 +3,25 @@ return {
         Joker = {
 
         },
+		Planet = {
+			c_kali_glopur = {
+				name = "Glopur",
+				text = {
+					"All poker hands",
+					"gain {C:glop}+#1#{} Glop"
+				}
+			},
+			c_kali_dvant = {
+				name = "Dvant",
+				text = {
+					"{S:0.8}({S:0.8,V:1}lvl.#1#{S:0.8}){} Level up",
+					"{C:attention}#2#",
+					"{C:mult}+#3#{} Mult and",
+					"{C:chips}+#4#{} Chips and",
+					"{C:glop}+#5#{} Glop",
+				}
+			},
+		},
         Spectral = {
             c_kali_ambrosia = {
 				name = "Ambrosia",
@@ -91,6 +110,14 @@ return {
         labels = {
             kali_stickernana = "Banana",
             e_kali_glop = "Glop"
-        }
+        },
+		poker_hands = {
+			kali_virgin_bouquet = "Virgin Bouquet",
+		},
+		poker_hand_descriptions = {
+			kali_virgin_bouquet = {
+				"A hand that contains a Queen, Jack, 10, and 2"
+			}
+		}
     }
 }
