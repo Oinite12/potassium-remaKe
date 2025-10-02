@@ -289,3 +289,48 @@ SMODS.Consumable {
         SMODS.add_card{key = "j_kali_glopku"}
     end
 }
+
+----------------
+
+-----------
+-- TAG
+-- Glop Tag
+-----------
+SMODS.Tag {
+    key = "glop",
+
+    atlas = "tags",
+    pos = {x = 0, y = 0},
+
+    in_pool = function () return false end,
+
+    apply = function (self, tag, context)
+        if context.type == "tag_add" and context.tag.key ~= "tag_kali_glop" then
+            local lock = tag.ID
+            G.CONTROLLER.locks[lock] = true
+            tag:yep('+', G.C.BLUE,function()
+                if context.tag.ability and context.tag.ability.orbital_hand then
+                    G.orbital_hand = context.tag.ability.orbital_hand
+                end
+                add_tag(Tag(context.tag.key))
+                G.orbital_hand = nil
+                G.CONTROLLER.locks[lock] = nil
+                return true
+            end)
+            tag.triggered = true
+        end
+
+        if context.type == "scoring" then
+            -- identical to calc_effect down at glop scoring param
+            SMODS.Scoring_Parameters.kali_glop:modify(0.5)
+            card_eval_status_text(tag.HUD_tag, 'extra', nil, nil, nil, {
+                message = localize{
+                    type = 'variable',
+                    key = 'a_chips',
+                    vars = {number_format(0.5)}
+                },
+                colour = self.colour
+            })
+        end
+    end
+}
