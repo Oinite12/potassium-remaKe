@@ -21,28 +21,20 @@ SMODS.Consumable {
         return true
     end,
     use = function (self, card, area, copier)
-        update_hand_text({
-            sound = 'button',
-            volume = 0.7,
-            pitch = 0.8,
-            delay = 0.3
-        }, {
-            handname = localize('k_all_hands'),
-            chips = '...',
-            mult = '...',
-            kali_glop = '...',
-            level=''
-        })
+        local current_scoring_params = Glop_f.current_upgradeable_scoring_parameters()
+        Glop_f.start_level_up_hand_animation{
+            hand_text = localize('k_all_hands'),
+            all_parameter_text = '...',
+            level_text = '',
+            scoring_params = current_scoring_params
+        }
 
         G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2, func = function()
             play_sound('tarot1')
             card:juice_up(0.8, 0.5)
-            G.TAROT_INTERRUPT_PULSE = true
             return true end }))
 
-        update_hand_text({
-            delay = 0
-        }, {
+        update_hand_text({delay = 0}, {
             kali_glop = '+'..card.ability.extra.glop,
             StatusText = true
         })
@@ -53,18 +45,10 @@ SMODS.Consumable {
             hand_prop.kali_extra_glop = hand_prop.kali_extra_glop + card.ability.extra.glop
             SMODS.Scoring_Parameters.kali_glop:level_up_hand(0, hand_prop)
         end
-
-        update_hand_text({
-            sound = 'button',
-            volume = 0.7,
-            pitch = 1.1,
-            delay = 0
-        }, {
-            mult = 0,
-            chips = 0,
-            kali_glop = SMODS.Scoring_Parameters.kali_glop.default_value,
-            handname = '', level = ''
-        })
+        
+        Glop_f.end_level_up_hand_animation{
+            scoring_params = current_scoring_params
+        }
     end
 }
 
