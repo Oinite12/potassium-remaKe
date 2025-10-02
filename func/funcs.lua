@@ -32,6 +32,11 @@ end
 ---- LEVEL UP HAND ANIMATION ----
 ---------------------------------
 
+-- Fetch the scoring parameters for the current scoring calculation.\
+-- If `hand` is specified, only scoring parameters with defined level hand upgrade\
+-- values will be returned.
+---@param hand? string
+---@return string[]
 Glop_f.current_upgradeable_scoring_parameters = function (hand)
     local current_scoring_params = {}
     for _, param_name in ipairs(Glop_f.current_scoring_calculation().parameters) do
@@ -46,32 +51,40 @@ Glop_f.current_upgradeable_scoring_parameters = function (hand)
     return current_scoring_params
 end
 
+-- Prepares the level up hand animation by setting parameter, hand, and level text.
+---@param args table<string, any>
+---@return nil
 Glop_f.start_level_up_hand_animation = function (args)
     args = args or {}
     local hand = args.hand
     local hand_text = args.hand_text or hand or ''
+    local parameter_text = args.parameter_text or {}
     local all_parameter_text = args.all_parameter_text or ''
     local level_text = args.level_text or (hand and G.GAME.hands[hand].level) or '?'
     local scoring_params = args.scoring_params or Glop_f.current_scoring_calculation().parameters
 
     local init_hand_text = {handname = hand_text, level = level_text}
     for _,param_name in ipairs(scoring_params --[[@as table]]) do
-        init_hand_text[param_name] = hand and G.GAME.hands[hand][param_name] or all_parameter_text
+        init_hand_text[param_name] = parameter_text[param_name] or (hand and G.GAME.hands[hand][param_name]) or all_parameter_text
     end
     update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, init_hand_text)
 end
 
+-- Plays the level up hand animation by flashing parameter text, and updating level text.
+---@param args table<string, any>
+---@return nil
 Glop_f.level_up_hand_animation = function (args)
     args = args or {}
     local hand = args.hand
     local card = args.card
+    local parameter_status_text = args.parameter_status_text or {}
     local all_parameter_status_text = args.all_parameter_status_text or ''
     local level_text = args.level_text or (hand and G.GAME.hands[hand].level) or ''
     local scoring_params = args.scoring_params or Glop_f.current_scoring_calculation().parameters
 
     -- Animations play in order of the `parameters` parameter of the scoring calculation
     for i,param_name in ipairs(scoring_params --[[@as table]]) do
-        local current_param_text = hand and G.GAME.hands[hand][param_name] or all_parameter_status_text
+        local current_param_text = parameter_status_text[param_name] or (hand and G.GAME.hands[hand][param_name]) or all_parameter_status_text
         Glop_f.add_simple_event('after', i == 1 and 0.2 or 0.9, function ()
             play_sound('tarot1')
             if card then card:juice_up(0.8, 0.5) end
@@ -89,6 +102,10 @@ Glop_f.level_up_hand_animation = function (args)
     delay(1.3)
 end
 
+-- Finishes the level up hand animation by clearing hand and level text,\
+-- and reseting parameter text to default values.
+---@param args table<string, any>
+---@return nil
 Glop_f.end_level_up_hand_animation = function (args)
     args = args or {}
     local scoring_params = args.scoring_params or Glop_f.current_scoring_calculation().parameters

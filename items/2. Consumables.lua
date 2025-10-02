@@ -227,9 +227,43 @@ SMODS.Consumable {
     atlas = "consumables",
     pos = {x = 1, y = 1},
 
+    soul_set = "Planet",
+    hidden = true,
     can_use = function (self, card) return true end,
     use = function (self, card, area, copier)
-        -- todo: implement glop
+        local current_scoring_params = Glop_f.current_upgradeable_scoring_parameters()
+
+        local spread_glop = 0
+        -- Count how much glop to spread
+        for hand_key in pairs(G.GAME.hands) do
+            local hand = G.GAME.hands[hand_key]
+            local level = hand.level
+            spread_glop = spread_glop + 0.2*(level - math.ceil(level/2))
+        end
+
+        Glop_f.start_level_up_hand_animation{
+            hand_text = localize('k_all_hands'),
+            all_parameter_text = '...',
+            level_text = '',
+            scoring_params = current_scoring_params
+        }
+        Glop_f.level_up_hand_animation{
+            card = card,
+            parameter_status_text = {kali_glop = '+'..spread_glop},
+            all_parameter_status_text = '-',
+            scoring_params = current_scoring_params,
+            level_text = '/2'
+        }
+        Glop_f.end_level_up_hand_animation{
+            scoring_params = current_scoring_params
+        }
+
+        -- Spread Glop and update hands accordingly
+        for hand_key in pairs(G.GAME.hands) do
+            local hand = G.GAME.hands[hand_key]
+            hand.kali_extra_glop = hand.kali_extra_glop + spread_glop
+            level_up_hand(card, hand_key, true, -math.ceil(hand.level/2))
+        end
     end
 }
 
@@ -252,7 +286,6 @@ SMODS.Consumable {
         return #G.jokers.cards < G.jokers.config.card_limit or card.area == G.jokers
     end,
     use = function (self, card, area, copier)
-        -- todo: add glop
         SMODS.add_card{key = "j_kali_glopku"}
     end
 }
