@@ -311,7 +311,9 @@ SMODS.Scoring_Calculation {
     key = 'glop',
     parameters = {'mult', 'chips', 'kali_glop'},
     func = function (self, chips, mult, flames) --[[@overload fun(self, chips, mult, flames): number]]
-        return chips * mult * SMODS.get_scoring_parameter('kali_glop', flames)
+        local glop = SMODS.get_scoring_parameter('kali_glop', flames)
+        if type(glop) == "string" then return 0 end
+        return chips * mult * glop
     end,
     replace_ui = function (self) --[[@overload fun(self): table]]
         local scale = 0.3

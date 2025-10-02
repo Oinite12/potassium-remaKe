@@ -107,7 +107,7 @@ for _, key in ipairs({
 	Potassium.calc_keys.all[key] = true
 end
 
--- Additive scaling
+-- Hyperoperative scaling
 for _, key in ipairs({
 	'ee_mult', 'eemult','EEmult_mod',
     'eee_mult', 'eeemult','EEEmult_mod',

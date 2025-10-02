@@ -10,34 +10,50 @@ function level_up_hand(card, hand, instant, amount)
     end
 
     if not instant then
-        local anim_once = false
-
-        -- Animations play in order of the `parameters` parameter of the scoring calculation
-        local current_scoring_params = Glop_f.current_scoring_calculation().parameters --[[@as table]]
-        for _,name in ipairs(current_scoring_params) do
-            Glop_f.add_simple_event('after', anim_once and 0.9 or 0.2, function ()
-                play_sound('tarot1')
-                if card then card:juice_up(0.8, 0.5) end
-                if not anim_once then G.TAROT_INTERRUPT_PULSE = true end
-            end)
-            update_hand_text({delay = 0}, {[name] = G.GAME.hands[hand][name], StatusText = true})
-            anim_once = true
-        end
-
-        Glop_f.add_simple_event('after', 0.9, function()
-            play_sound('tarot1')
-            if card then card:juice_up(0.8, 0.5) end
-            G.TAROT_INTERRUPT_PULSE = nil
-        end)
-
-        update_hand_text({sound = 'button', volume = 0.7, pitch = 0.9, delay = 0}, {level=G.GAME.hands[hand].level})
-        delay(1.3)
+        Glop_f.level_up_hand_animation{
+            hand = hand,
+            scoring_params = Glop_f.current_upgradeable_scoring_parameters(hand)
+        }
     end
 
     G.E_MANAGER:add_event(Event({
         trigger = 'immediate',
         func = (function() check_for_unlock{type = 'upgrade_hand', hand = hand, level = G.GAME.hands[hand].level} return true end)
     }))
+end
+
+-- Hook to change behavior of Planet Card usage
+local card_useconsumeable_hook = Card.use_consumeable
+function Card:use_consumeable(area, copier)
+    -- START OF RIP FROM SOURCE --
+    stop_use()
+    if not copier then set_consumeable_usage(self) end
+    if self.debuff then return nil end
+    local used_tarot = copier or self
+
+    if self.ability.consumeable.max_highlighted then
+        update_hand_text({immediate = true, nopulse = true, delay = 0}, {mult = 0, chips = 0, level = '', handname = ''})
+    end
+
+    local obj = self.config.center
+    if obj.use and type(obj.use) == 'function' then
+        obj:use(self, area, copier)
+        return
+    end
+    -- END OF RIP FROM SOURCE --
+    if self.ability.consumeable.hand_type then
+        local current_scoring_params = Glop_f.current_upgradeable_scoring_parameters()
+        Glop_f.start_level_up_hand_animation{
+            hand = self.ability.consumeable.hand_type,
+            scoring_params = current_scoring_params
+        }
+        level_up_hand(self, self.ability.consumeable.hand_type, nil, 1)
+        Glop_f.end_level_up_hand_animation{
+            scoring_params = current_scoring_params
+        }
+    else
+        card_useconsumeable_hook(self, area, copier)
+    end
 end
 
 -- New Card method: calculate_stickernana
@@ -92,21 +108,6 @@ function Game:start_run(...)
         end
         G.GAME.set_permaglop = true
     end
-
-    G.hand_text_area.chips = G.HUD:get_UIE_by_ID('hand_chips_area') or nil
-    G.hand_text_area.mult  = G.HUD:get_UIE_by_ID('hand_mult_area')  or nil
-end
-
--- Hook to increase Glop by 0.01 per chip/mult/glop/etc increase
-local smods_calcfx_hook = SMODS.calculate_effect
-function SMODS.calculate_effect(effect, ...)
-    local ret = smods_calcfx_hook(effect, ...)
-    for key in pairs(effect) do
-        if Potassium.calc_keys.all[key] then
-            SMODS.Scoring_Parameters.kali_glop:modify(0.01)
-        end
-    end
-    return ret
 end
 
 -- Ownership of Eternal sticker to prevent it from applying to cards with Banana sticker
