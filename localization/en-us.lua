@@ -1,7 +1,49 @@
 return {
     descriptions = {
         Joker = {
-
+			j_kali_plantation = {
+				name = "Plantation",
+				text = {
+					"{C:attention}Banana{} Jokers give {X:mult,C:white}X#1# {} Mult",
+					"At end of round, apply",
+					"{C:attention}Banana{} to adjacent Jokers",
+				}
+			},
+			j_kali_blue_java = {
+				name = "Blue Java",
+				text = {
+                    "{X:dark_edition,C:white} ^#1# {} Mult",
+                    "{C:green}#2# in #3#{} chance this",
+                    "card is destroyed",
+                    "at end of round",
+				}
+			},
+			j_kali_glop_bucket = {
+				name = "A Glop in the Bucket",
+				text = {
+					"This Joker gains",
+					"{C:glop}+#1#{} Glop when each",
+					"played {C:attention}card{} is scored",
+					"{C:inactive}(Currently {C:glop}+#2#{C:inactive} Glop)",
+				}
+			},
+			j_kali_banana_bread = {
+				name = "Banana Bread",
+				text = {
+					"Gain {X:mult,C:white}X#1# {} Mult when a",
+					"{C:attention}Banana{} card goes extinct",
+					"{C:inactive}(Currently: {X:mult,C:white}X#2# {C:inactive} Mult)",
+				}
+			},
+			j_kali_begg = {
+				name = "Begg",
+				text = {
+                    "Gains {C:money}$#1#{} of {C:attention}sell value",
+                    "at end of round",
+					"{C:green}#2# in #3#{} chance to",
+					"{C:attention}halve{} sell value instead"
+				}
+			}
         },
 		Planet = {
 			c_kali_glopur = {
