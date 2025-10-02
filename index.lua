@@ -54,19 +54,19 @@ Glop_f.load_directory("items")
 -- Add Ambrosia evolutions
 Potassium.banana_evolutions = Potassium.banana_evolutions or {}
 local k_map = Potassium.banana_evolutions
-k_map["j_ice_cream"]   = "j_kali_banana_split"
-k_map["j_selzer"]      = "j_kali_potassium_bottle"
 k_map["j_egg"]         = "j_kali_begg"
+k_map["j_ice_cream"]   = "j_kali_banana_split"
 k_map["j_turtle_bean"] = "j_kali_banana_bean"
+k_map["j_selzer"]      = "j_kali_potassium_bottle"
 
 -- Add Substance evolutions
 Potassium.glop_evolutions = Potassium.glop_evolutions or {}
 local g_map = Potassium.glop_evolutions
-g_map["j_popcorn"]     = "j_kali_glop_corn"
 g_map["j_gros_michel"] = "j_kali_glop_michel"
-g_map["j_diet_cola"]   = "j_kali_glop_cola"
-g_map["j_cavendish"]   = "j_kali_glopendish"
 g_map["j_egg"]         = "j_kali_glegg"
+g_map["j_cavendish"]   = "j_kali_glopendish"
+g_map["j_diet_cola"]   = "j_kali_glop_cola"
+g_map["j_popcorn"]     = "j_kali_glop_corn"
 
 -- Manual list of calculation keys and their growth speed
 Potassium.calc_keys = Potassium.calc_keys or {}
