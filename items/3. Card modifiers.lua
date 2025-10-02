@@ -58,6 +58,28 @@ SMODS.Edition {
 -- STICKER
 -- Banana
 ----------
+-- Determine if the card with a Banana sticker hits the chance to go extinct.
+---@param card Card
+---@return { message: string } | nil
+local function calculate_stickernana(card)
+    if not SMODS.pseudorandom_probability(card, 'stickernana', 1, 10) then
+        return {message = localize("k_safe_ex")}
+    end
+
+    SMODS.destroy_cards(card, nil, true, true)
+    SMODS.calculate_context({kali_extinct = true, other_card = card})
+
+    if card.config.center.key == "j_gros_michel" then
+        G.GAME.pool_flags.gros_michel_extinct = true
+    elseif card.config.center.key == "j_cavendish" then
+        G.GAME.pool_flags.cavendish_extinct = true
+    end
+
+    return {
+        message = localize("k_extinct_ex")
+    }
+end
+
 SMODS.Sticker {
     key = "stickernana",
     badge_colour = HEX("e8c500"),
@@ -100,7 +122,7 @@ SMODS.Sticker {
             and not context.individual
         ) then
             if card.ability.set == "Joker" then
-                return card:calculate_stickernana()
+                return calculate_stickernana(card)
             end
         end
 
@@ -109,7 +131,7 @@ SMODS.Sticker {
             and context.destroying_card
             and context.destroy_card == card
         ) then
-            return card:calculate_stickernana()
+            return calculate_stickernana(card)
         end
     end
 }

@@ -16,3 +16,13 @@ A remake of Potassium, a Balatro mod that has all the bananas and glop you could
     - For example, the calculation key `chips` goes into `Potassium.calc_keys.additive`, while the calculation key `x_chips` goes into `Potassium.calc_keys.multiplicative`
   - These tables are also used in the Glop edition's effect, where calculation keys corresponding to value scaling of certain growth types also scale Glop at a lower growth type.
 - This remake of Potassium does not feature permanent glop via Glopway (as it was largely a joke-y feature), however if you wish to use the mechanic for whatever reason, permanent glop can be increased per save via the function `Glop_f.increase_permaglop(number)`; all hands are updated in the current and future runs accordingly. Permaglop is saved in the profile parameter `G.PROFILES[G.SETTINGS.profile].permaglop`, but the shorthand `Glop_f.get_permaglop()`.
+
+### Contexts
+This context occurs when a card goes extinct. It is sent by Gros Michel, Cavendish, Blue Java, Banana Bean, and anything with the Banana sticker.
+```lua
+if context.kali_extinct then
+{
+    kali_extinct = true,
+    other_card = card
+}
+```

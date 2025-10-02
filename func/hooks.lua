@@ -75,30 +75,6 @@ function Card:use_consumeable(area, copier)
     end
 end
 
--- New Card method: calculate_stickernana
-
--- Determine if the card with a Banana sticker hits the chance to go extinct.
----@return { message: string } | nil
-function Card:calculate_stickernana()
-    if not self.ability.extinct then
-        if self.ability.kali_stickernana and SMODS.pseudorandom_probability(self, 'stickernana', 1, 10) then
-            self.ability.extinct = true
-            SMODS.destroy_cards(self, nil, nil, true)
-
-            if self.config.center.key == "j_gros_michel" then
-                G.GAME.pool_flags.gros_michel_extinct = true
-            elseif self.config.center.key == "j_cavendish" then
-                G.GAME.pool_flags.cavendish_extinct = true
-            end
-
-            SMODS.calculate_context({extinct = true, other_card = self})
-            return { message = localize("k_extinct_ex") }
-        elseif self.ability.kali_stickernana then
-            return { message = localize("k_safe_ex") }
-        end
-    end
-end
-
 
 
 ---------------------

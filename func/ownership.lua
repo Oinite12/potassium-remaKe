@@ -25,7 +25,7 @@ SMODS.Tag:take_ownership('orbital', {
             return true
         end
     end
-})
+}, true)
 
 -- CONSUMABLE: Black Hole
 -- Proper level up hand animation with other scoring parameters
@@ -51,7 +51,7 @@ SMODS.Consumable:take_ownership('black_hole', {
             level_up_hand(card, hand_key, true)
         end
     end
-})
+}, true)
 
 -- JOKER: Burnt Joker
 -- Proper level up hand animation with other scoring parameters
@@ -73,7 +73,59 @@ SMODS.Joker:take_ownership('burnt', {
         end
 
     end
-})
+}, true)
+
+-- JOKER: Gros Michel
+-- Extinct context compatibility
+SMODS.Joker:take_ownership('gros_michel', {
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {mult = card.ability.extra.mult}
+        end
+        if (
+            context.end_of_round
+            and context.game_over == false
+            and not context.repetition
+            and not context.blueprint
+        ) then
+			if not SMODS.pseudorandom_probability(card, 'gros_michel', 1, card.ability.extra.odds) then
+				return { message = localize('k_safe_ex') }
+			end
+
+            -- Odd is hit
+            SMODS.destroy_cards(card, nil, true, true)
+            SMODS.calculate_context({kali_extinct = true, other_card = card})
+            G.GAME.pool_flags.gros_michel_extinct = true
+            return { message = localize('k_extinct_ex') }
+        end
+    end
+}, true)
+
+-- JOKER: Cavendish
+-- Extinct context compatibility
+SMODS.Joker:take_ownership('cavendish', {
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {mult = card.ability.extra.Xmult}
+        end
+        if (
+            context.end_of_round
+            and context.game_over == false
+            and not context.repetition
+            and not context.blueprint
+        ) then
+			if not SMODS.pseudorandom_probability(card, 'cavendish', 1, card.ability.extra.odds) then
+				return { message = localize('k_safe_ex') }
+			end
+
+            -- Odd is hit
+            SMODS.destroy_cards(card, nil, true, true)
+            SMODS.calculate_context({kali_extinct = true, other_card = card})
+            G.GAME.pool_flags.cavendish_extinct = true
+            return { message = localize('k_extinct_ex') }
+        end
+    end
+}, true)
 
 -- STICKER: Eternal
 -- Prevent it from applying to cards with Banana sticker
