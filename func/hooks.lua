@@ -1,3 +1,16 @@
+-- These functions append certain behaviors onto existing functions
+-- in a manner easier than patching
+
+-- 1. GLOBAL FUNCTIONS
+-- 2. CARD OBJECT
+-- 3. GAME OBJECT
+
+
+
+--------------------------
+---- GLOBAL FUNCTIONS ----
+--------------------------
+
 -- Override to properly update all scoring parameters during level up
 function level_up_hand(card, hand, instant, amount)
     amount = amount or 1
@@ -22,7 +35,13 @@ function level_up_hand(card, hand, instant, amount)
     }))
 end
 
--- Hook to change behavior of Planet Card usage
+
+---------------------
+---- CARD OBJECT ----
+---------------------
+
+-- Hook for Planet Cards having proper level up hand animation
+-- with other scoring parameters
 local card_useconsumeable_hook = Card.use_consumeable
 function Card:use_consumeable(area, copier)
     -- START OF RIP FROM SOURCE --
@@ -80,6 +99,12 @@ function Card:calculate_stickernana()
     end
 end
 
+
+
+---------------------
+---- GAME OBJECT ----
+---------------------
+
 -- Hook to set profile permaglop, if not already set
 local game_initgameobj_hook = Game.init_game_object
 function Game:init_game_object()
@@ -109,15 +134,3 @@ function Game:start_run(...)
         G.GAME.set_permaglop = true
     end
 end
-
--- Ownership of Eternal sticker to prevent it from applying to cards with Banana sticker
-SMODS.Sticker:take_ownership('eternal', {
-    should_apply = function (self, card, center, area, bypass_reroll)
-        return (
-            G.GAME.modifiers.enable_eternals_in_shop
-            and not card.perishable
-            and not card.kali_stickernana
-            and card.config.center.eternal_compat
-        )
-    end
-}, true)

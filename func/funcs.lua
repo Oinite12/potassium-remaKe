@@ -1,3 +1,14 @@
+-- These commonly called functions are used across the mod
+
+-- 1. PERMAGLOP
+-- 2. LEVEL UP HAND ANIMATION
+
+
+
+-------------------
+---- PERMAGLOP ----
+-------------------
+
 -- Increase permaglop on the current save file.
 ---@param amount number
 ---@return nil
@@ -14,6 +25,12 @@ Glop_f.get_permaglop = function() return G.PROFILES[G.SETTINGS.profile].permaglo
 Glop_f.current_scoring_calculation = function()
     return getmetatable(G.GAME.current_scoring_calculation).__index
 end
+
+
+
+---------------------------------
+---- LEVEL UP HAND ANIMATION ----
+---------------------------------
 
 Glop_f.current_upgradeable_scoring_parameters = function (hand)
     local current_scoring_params = {}

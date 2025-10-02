@@ -1,3 +1,7 @@
+-- Taking ownership of various objects for better compatibility
+
+-- TAG: Orbital Tag
+-- Proper level up hand animation with other scoring parameters
 SMODS.Tag:take_ownership('orbital', {
     apply = function (self, tag, context)
         if context.type == 'immediate' then
@@ -23,6 +27,8 @@ SMODS.Tag:take_ownership('orbital', {
     end
 })
 
+-- CONSUMABLE: Black Hole
+-- Proper level up hand animation with other scoring parameters
 SMODS.Consumable:take_ownership('black_hole', {
     use = function (self, card, area, copier)
         local current_scoring_params = Glop_f.current_upgradeable_scoring_parameters()
@@ -47,6 +53,8 @@ SMODS.Consumable:take_ownership('black_hole', {
     end
 })
 
+-- JOKER: Burnt Joker
+-- Proper level up hand animation with other scoring parameters
 SMODS.Joker:take_ownership('burnt', {
     calculate = function (self, card, context)
         if context.pre_discard then
@@ -63,6 +71,19 @@ SMODS.Joker:take_ownership('burnt', {
             }
             return nil, true
         end
-        
+
     end
 })
+
+-- STICKER: Eternal
+-- Prevent it from applying to cards with Banana sticker
+SMODS.Sticker:take_ownership('eternal', {
+    should_apply = function (self, card, center, area, bypass_reroll)
+        return (
+            G.GAME.modifiers.enable_eternals_in_shop
+            and not card.perishable
+            and not card.kali_stickernana
+            and card.config.center.eternal_compat
+        )
+    end
+}, true)
