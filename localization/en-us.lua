@@ -160,6 +160,10 @@ return {
 			kali_virgin_bouquet = {
 				"A hand that contains a Queen, Jack, 10, and 2"
 			}
+		},
+		v_dictionary = {
+            a_emult="^#1# Mult",
+            a_emult_minus="-^#1# Mult",
 		}
     }
 }

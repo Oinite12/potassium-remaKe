@@ -139,3 +139,33 @@ SMODS.Sticker:take_ownership('eternal', {
         )
     end
 }, true)
+
+-- SCORING PARAMETER: Mult
+-- Exponential mult
+local sp_mult_calc_hook = SMODS.Scoring_Parameters.mult.calc_effect
+SMODS.Scoring_Parameter:take_ownership('mult', {
+    calc_effect = function(self, effect, scored_card, key, amount, from_edition)
+        if (key == 'emult' or key == 'e_mult' or key == 'Emult_mod') then
+            if effect.card and effect.card ~= scored_card then juice_card(effect.card) end
+            self:modify(self.current^amount - self.current)
+            if not effect.remove_default_message then
+                if from_edition then
+                    card_eval_status_text(scored_card, 'jokers', nil, percent, nil, {message = localize{type='variable',key= amount > 0 and 'a_emult' or 'a_emult_minus',vars={amount}}, Emult_mod =  amount, colour =  G.C.DARK_EDITION, edition = true})
+                else
+                    if key ~= 'Emult_mod' then
+                        if effect.emult_message then
+                            card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.emult_message)
+                        else
+                            card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'e_mult', amount, percent)
+                        end
+                    end
+                end
+            end
+            return true
+        end
+        return sp_mult_calc_hook(self, effect, scored_card, key, amount, from_edition)
+    end
+}, true)
+table.insert(SMODS.Scoring_Parameters.mult.calculation_keys, 'emult')
+table.insert(SMODS.Scoring_Parameters.mult.calculation_keys, 'e_mult')
+table.insert(SMODS.Scoring_Parameters.mult.calculation_keys, 'Emult_mod')
