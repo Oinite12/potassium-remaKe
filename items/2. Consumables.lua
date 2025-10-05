@@ -1,3 +1,32 @@
+--------------------------
+-- SUPPLEMENTARY FUNCTIONS
+--------------------------
+
+-- Get a random Joker for evolution.
+---@param evo_table {string: string}
+---@param seed string
+---@return table
+---@return string|false
+local target_random_evo = function(evo_table, seed)
+    local evolving_jokers = {}
+    local non_evolving_jokers = {}
+
+    for held_joker in ipairs(G.jokers.cards) do
+        if evo_table[held_joker.config.center.key] then
+            table.insert(evolving_jokers, held_joker)
+        else
+            table.insert(non_evolving_jokers, held_joker)
+        end
+    end
+
+    if #evolving_jokers > 0 then
+        local target_joker = pseudorandom_element(evolving_jokers, seed) --[[@as table]]
+        return target_joker, evo_table[target_joker.config.center.key]
+    else
+        return pseudorandom_element(non_evolving_jokers, seed) --[[@as table]], false
+    end
+end
+
 ---------
 -- PLANET
 -- Glopur
@@ -83,8 +112,6 @@ SMODS.Consumable {
     pos = { x = 1, y = 0 }
 }
 
-----------------
-
 -----------
 -- SPECTRAL
 -- Ambrosia
@@ -113,33 +140,17 @@ SMODS.Consumable {
         end
         return false
     end,
-
     use = function (self, card, area, copier)
-        local eligible_jokers = {}
-        for held_joker in ipairs(G.jokers.cards) do
-            if not (
-                held_joker.ability.kali_stickernana
-                or held_joker.ability.eternal
-            ) then table.insert(eligible_jokers, held_joker) end
-        end
-
-        if #eligible_jokers == 0 then return end
-
-        local select_joker = pseudorandom_element(
-            eligible_jokers,
-            pseudoseed('ambrosia'..G.GAME.round_resets.ante)
-        ) --[[@as Card]]
+        local target_joker, evolution_key = target_random_evo(Potassium.banana_evolutions, 'kali_ambrosia')
 
         play_sound('tarot1')
-        local select_joker_key = select_joker.config.center.key
-        local select_joker_evo = Potassium.banana_evolutions[select_joker_key]
-
-        if select_joker_evo then
-            select_joker:set_ability(G.P_CENTERS[select_joker_evo])
+        if evolution_key ~= false then
+            target_joker:set_ability(G.P_CENTERS[evolution_key])
         else
-            select_joker:add_sticker('kali_stickernana')
+            target_joker:add_sticker('kali_stickernana')
         end
-    end,
+        target_joker:juice_up(0.3, 0.4)
+    end
 }
 
 ------------
@@ -162,42 +173,19 @@ SMODS.Consumable {
         end
         return false
     end,
-
     use = function (self, card, area, copier)
-        local eligible_jokers = {}
-        for held_joker in ipairs(G.jokers.cards) do
-            if not held_joker then
-                table.insert(eligible_jokers, held_joker)
-            end
-        end
-
-        if #eligible_jokers == 0 then return end
-
-        local select_joker = pseudorandom_element(
-            eligible_jokers,
-            pseudoseed('ambrosia'..G.GAME.round_resets.ante)
-        ) --[[@as Card]]
+        local target_joker, evolution_key = target_random_evo(Potassium.glop_evolutions, 'kali_substance')
 
         play_sound('tarot1')
-        local select_joker_key = select_joker.config.center.key
-        local select_joker_evo = Potassium.glop_evolutions[select_joker_key]
-
-        if select_joker_evo then
-            select_joker:set_ability(G.P_CENTERS[select_joker_evo])
-            play_sound('kali_glop_edition', 1, 1)
-        elseif (
-            select_joker.config.center.rarity == 4
-            and select_joker.config.center.key ~= "j_kali_glopmother"
-            and select_joker.config.center.key ~= "j_kali_glopku"
-        ) then
-            select_joker:set_ability(G.P_CENTERS['j_banana_glopmother'])
+        if evolution_key ~= false then
+            target_joker:set_ability(G.P_CENTERS[evolution_key])
             play_sound('kali_glop_edition', 1, 1)
         else
-            select_joker:set_edition('e_kali_glop')
+            target_joker:set_edition('e_kali_glop')
         end
 
-        select_joker:juice_up(0.3, 0.4)
-    end,
+        target_joker:juice_up(0.3, 0.4)
+    end
 }
 
 --------------
