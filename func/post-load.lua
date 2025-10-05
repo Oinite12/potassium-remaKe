@@ -10,14 +10,14 @@ Glop_f.add_simple_event(nil, nil, function ()
     end
 
     -- Set Legendary Jokers as evolving into Glop Mother, except for Glopku and Glop Mother
-    for joker in pairs(G.P_CENTERS) do
+    for _,center in pairs(G.P_CENTERS) do
         if (
-            joker.ability.set == 'Joker'
-            and joker.config.center.rarity == 4
-            and joker.config.center.key ~= "j_kali_glopmother"
-            and joker.config.center.key ~= "j_kali_glopku"
+            center.set == 'Joker'
+            and center.rarity == 4
+            and center.key ~= "j_kali_glopmother"
+            and center.key ~= "j_kali_glopku"
         ) then
-            Potassium.glop_evolutions[joker.config.center.key] = "j_kali_glopmother"
+            Potassium.glop_evolutions[center.key] = "j_kali_glopmother"
         end
     end
 end)
