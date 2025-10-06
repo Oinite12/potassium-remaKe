@@ -43,3 +43,44 @@ if Potassium.calc_keys.all[key] then
 end
 '''
 match_indent = true
+
+# -- CARD GLOP --
+
+# function Card:set_ability
+# Set defaults for permanent card bonuses (Card perma_glop
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "perma_bonus = self.ability and self.ability.perma_bonus or 0,"
+position = "after"
+payload = '''
+perma_glop = self.ability and self.ability.perma_glop or 0,
+'''
+match_indent = true
+
+# function Card:generate_UIBox_ability_table
+# Prime specific_vars for playing cards
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "bonus_chips = bonus_chips ~= 0 and bonus_chips or nil,"
+position = "after"
+payload = '''
+bonus_glop = self.ability.perma_glop ~= 0 and (self.ability.perma_glop) or nil,'''
+match_indent = true
+
+
+# function eval_card
+# Make card perma glop score
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '-- TARGET: main scoring on played cards'
+position = "after"
+match_indent = true
+payload = '''
+local glop = card:get_glop()
+if glop > 0 then
+    ret.playing_card.glop = glop
+end
+'''

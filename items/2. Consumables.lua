@@ -1,32 +1,3 @@
---------------------------
--- SUPPLEMENTARY FUNCTIONS
---------------------------
-
--- Get a random Joker for evolution.
----@param evo_table {string: string}
----@param seed string
----@return table
----@return string|false
-local target_random_evo = function(evo_table, seed)
-    local evolving_jokers = {}
-    local non_evolving_jokers = {}
-
-    for held_joker in ipairs(G.jokers.cards) do
-        if evo_table[held_joker.config.center.key] then
-            table.insert(evolving_jokers, held_joker)
-        else
-            table.insert(non_evolving_jokers, held_joker)
-        end
-    end
-
-    if #evolving_jokers > 0 then
-        local target_joker = pseudorandom_element(evolving_jokers, seed) --[[@as table]]
-        return target_joker, evo_table[target_joker.config.center.key]
-    else
-        return pseudorandom_element(non_evolving_jokers, seed) --[[@as table]], false
-    end
-end
-
 ---------
 -- PLANET
 -- Glopur
@@ -132,24 +103,42 @@ SMODS.Consumable {
     pos = {x = 2, y = 1},
 
     can_use = function(self, card)
-        for held_joker in ipairs(G.jokers.cards) do
-            if not (
-                held_joker.ability.kali_stickernana
-                or held_joker.ability.eternal
+        local evo_table = Potassium.banana_evolutions
+        for _,held_joker in ipairs(G.jokers.cards) do
+            if (
+                not (held_joker.ability.kali_stickernana or held_joker.ability.eternal)
+                or evo_table[held_joker.config.center.key]
             ) then return true end
         end
         return false
     end,
     use = function (self, card, area, copier)
-        local target_joker, evolution_key = target_random_evo(Potassium.banana_evolutions, 'kali_ambrosia')
+        local evo_table = Potassium.banana_evolutions
 
-        play_sound('tarot1')
-        if evolution_key ~= false then
-            target_joker:set_ability(G.P_CENTERS[evolution_key])
-        else
-            target_joker:add_sticker('kali_stickernana')
+        local evolving_jokers = {}
+        local non_evolving_jokers = {}
+
+        for _,held_joker in ipairs(G.jokers.cards) do
+            if evo_table[held_joker.config.center.key] then
+                table.insert(evolving_jokers, held_joker)
+            elseif not (held_joker.ability.kali_stickernana or held_joker.ability.eternal) then
+                table.insert(non_evolving_jokers, held_joker)
+            end
         end
+
+        local target_joker
+        if #evolving_jokers > 0 then
+            target_joker = pseudorandom_element(evolving_jokers, 'kali_ambrosia') --[[@as table]]
+            local evo_key = evo_table[target_joker.config.center.key]
+            target_joker:set_ability(G.P_CENTERS[evo_key])
+        else
+            target_joker = pseudorandom_element(non_evolving_jokers, 'kali_ambrosia') --[[@as table]]
+            target_joker:add_sticker('kali_stickernana', true)
+        end
+        play_sound('tarot1')
         target_joker:juice_up(0.3, 0.4)
+
+        ease_dollars(20)
     end
 }
 
@@ -168,22 +157,39 @@ SMODS.Consumable {
     pos = {x = 0, y = 1},
 
     can_use = function(self, card)
-        for held_joker in ipairs(G.jokers.cards) do
-            if not held_joker.edition then return true end
+        local evo_table = Potassium.glop_evolutions
+        for _,held_joker in ipairs(G.jokers.cards) do
+            if (
+                not held_joker.edition
+                or evo_table[held_joker.config.center.key]
+            ) then return true end
         end
         return false
     end,
     use = function (self, card, area, copier)
-        local target_joker, evolution_key = target_random_evo(Potassium.glop_evolutions, 'kali_substance')
+        local evo_table = Potassium.glop_evolutions
 
-        play_sound('tarot1')
-        if evolution_key ~= false then
-            target_joker:set_ability(G.P_CENTERS[evolution_key])
-            play_sound('kali_glop_edition', 1, 1)
-        else
-            target_joker:set_edition('e_kali_glop')
+        local evolving_jokers = {}
+        local non_evolving_jokers = {}
+
+        for _,held_joker in ipairs(G.jokers.cards) do
+            if evo_table[held_joker.config.center.key] then
+                table.insert(evolving_jokers, held_joker)
+            elseif not held_joker.edition then
+                table.insert(non_evolving_jokers, held_joker)
+            end
         end
 
+        local target_joker
+        if #evolving_jokers > 0 then
+            target_joker = pseudorandom_element(evolving_jokers, 'kali_substance') --[[@as table]]
+            local evo_key = evo_table[target_joker.config.center.key]
+            target_joker:set_ability(G.P_CENTERS[evo_key])
+        else
+            target_joker = pseudorandom_element(non_evolving_jokers, 'kali_substance') --[[@as table]]
+            target_joker:set_edition('e_kali_glop')
+        end
+        play_sound('tarot1')
         target_joker:juice_up(0.3, 0.4)
     end
 }
@@ -258,7 +264,13 @@ SMODS.Consumable {
         return #G.jokers.cards < G.jokers.config.card_limit or card.area == G.jokers
     end,
     use = function (self, card, area, copier)
-        SMODS.add_card{key = "j_kali_glopku"}
+        Glop_f.add_simple_event('after', 0.4, function ()
+            play_sound('timpani')
+            SMODS.add_card{key = "j_kali_glopku"}
+            check_for_unlock { type = 'spawn_legendary' }
+            card:juice_up(0.3, 0.5)
+        end)
+        delay(0.6)
     end
 }
 

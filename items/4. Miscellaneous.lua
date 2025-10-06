@@ -10,9 +10,9 @@ SMODS.Stake {
     sticker_atlas = "stickers",
     sticker_pos = {x = 0, y = 0},
 
-    applied_stakes = { "stake_gold" },
+    applied_stakes = { "gold" },
 
     modifiers = function ()
-        G.GAME.modifiers.enable_banana = true
+        G.GAME.modifiers.enable_stickernana = true
     end,
 }

@@ -104,15 +104,15 @@ SMODS.Sticker {
     needs_enabled_flag = true,
     should_apply = function (self, card, center, area, bypass_reroll)
         return (
-            (
-                area == G.pack_cards
-                or area == G.shop_jokers
-            )
-            and card.ability.set == "Joker"
+            SMODS.Sticker.should_apply(self, card, center, area, bypass_reroll)
             and G.GAME.modifiers.enable_stickernana
+            and not card.ability.eternal
         )
     end,
     rate = 0.3,
+    sets = {
+        Joker = true
+    },
 
     calculate = function(self, card, context)
         if (

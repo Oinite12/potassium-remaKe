@@ -18,6 +18,14 @@ return {
                     "at end of round",
 				}
 			},
+			j_kali_banana_bread = {
+				name = "Banana Bread",
+				text = {
+					"Gain {X:mult,C:white}X#1# {} Mult when a",
+					"{C:attention}Banana{} card goes extinct",
+					"{C:inactive}(Currently: {X:mult,C:white}X#2# {C:inactive} Mult)",
+				}
+			},
 			j_kali_glop_bucket = {
 				name = "A Glop in the Bucket",
 				text = {
@@ -27,14 +35,7 @@ return {
 					"{C:inactive}(Currently {C:glop}+#2#{C:inactive} Glop)",
 				}
 			},
-			j_kali_banana_bread = {
-				name = "Banana Bread",
-				text = {
-					"Gain {X:mult,C:white}X#1# {} Mult when a",
-					"{C:attention}Banana{} card goes extinct",
-					"{C:inactive}(Currently: {X:mult,C:white}X#2# {C:inactive} Mult)",
-				}
-			},
+
 			j_kali_begg = {
 				name = "Begg",
 				text = {
@@ -43,7 +44,103 @@ return {
 					"{C:green}#2# in #3#{} chance to",
 					"{C:attention}halve{} sell value instead"
 				}
-			}
+			},
+			j_kali_banana_split = {
+				name = "Banana Split",
+				text = {
+					"{C:chips}+#1#{} Chips",
+                    "{C:green}#2# in #3#{} chance this",
+                    "card is {C:attention}split",
+                    "at end of round",
+					"{C:inactive}(Does not require room)"
+				}
+			},
+			j_kali_banana_bean = {
+				name = "Banana Bean",
+				text = {
+                    "{C:attention}+#1#{} hand size, increases",
+                    "by {C:attention}#2#{} every round",
+					"{C:green}#3# in #4#{} chance to destroy",
+					"this Joker and scored cards",
+					"when hand played"
+				}
+			},
+			j_kali_potassium_bottle = {
+				name = "Potassium in a Bottle",
+				text = {
+					"Retrigger all cards {C:attention}#1#{} additional times",
+					"Scoring cards become {C:attention}Banana",
+                    "{C:green}#2# in #3#{} chance this card",
+                    "is destroyed at end of round",
+				}
+			},
+
+			j_kali_glop_michel = {
+				name = "Glop Michel",
+				text = {
+					"{C:glop}+#1#{} Glop",
+					"{C:green}#2# in #3#{} chance for",
+					"{C:glop}+#4#{} Glop instead"
+				}
+			},
+			j_kali_glegg = {
+				name = "Glegg",
+				text = {
+					"When Blind selected,",
+					"create a {C:attention}Glopur{C:inactive,E:1}?",
+					"{C:inactive}(Must have room)"
+				}
+			},
+			j_kali_glopendish = {
+				name = "Glopendish",
+				text = {
+                    "When {C:attention}Blind{} is selected, {C:green}#1# in #2#{} chance ",
+                    "to destroy Joker to the right",
+                    "and permanently add {C:attention}one-tenth{} of",
+                    "its sell value to this {C:glop}Glop",
+					"{C:green}#3# in #4#{} chance this card",
+                    "is destroyed at end of round",
+                    "{C:inactive}(Currently {C:glop}+#5#{C:inactive} Glop)",
+				}
+			},
+			j_kali_glop_cola = {
+				name = "Glop Cola",
+                text={
+                    "Sell this card to",
+                    "create a free",
+                    "{C:glop}#1#",
+                },
+			},
+			j_kali_glop_corn = {
+				name = "Glop Corn",
+				text = {
+					"{C:glop}+#1#{} Glop",
+					"Decreases by {C:glop}#2#{} at",
+					"end of round",
+					"{C:inactive,s:0.8}Fresh off the clob",
+				}
+			},
+			j_kali_glopmother = {
+				name = "Glopmother",
+				text = {
+					"{X:glop,C:white,E:1,s:1.5}^2{s:1.5,E:1,C:dark_edition} Glop"
+				}
+			},
+			j_kali_glopmother_fakeout = {
+				name = "Glopmother",
+				text = {
+					"Playing cards give",
+					"{X:sfark,C:white}X7{} Sfark when scored"
+				}
+			},
+			j_kali_glopku = {
+				name = "Glopku",
+				text = {
+                    "Every played {C:attention}card{}",
+                    "permanently gains",
+                    "{C:glop}+#1#{} Glop when scored",
+				}
+			},
         },
 		Planet = {
 			c_kali_glopur = {
@@ -92,8 +189,6 @@ return {
             c_kali_glopway = {
 				name = "Glopway",
 				text = {
-					"{C:glop}+0.01{} base Glop",
-					"across all runs",
 					"Create a {C:attention}Glopku",
 					"{C:inactive}(Must have room)"
 				}
@@ -130,8 +225,12 @@ return {
 			}
 		},
         Other = {
-            -- Sticker
-            kali_stickernana = {
+			card_extra_glop = {
+				text = {
+					"{C:glop}+#1#{} Glop",
+				}
+			},
+			kali_stickernana = {
                 name = "Banana",
                 text = {
                     "{C:green}#1# in #2#{} chance this",
@@ -151,7 +250,7 @@ return {
     misc = {
         labels = {
             kali_stickernana = "Banana",
-            e_kali_glop = "Glop"
+            kali_glop = "Glop"
         },
 		poker_hands = {
 			kali_virgin_bouquet = "Virgin Bouquet",
@@ -161,9 +260,14 @@ return {
 				"A hand that contains a Queen, Jack, 10, and 2"
 			}
 		},
+		dictionary = {
+			k_split_ex = "Split!",
+		},
 		v_dictionary = {
             a_emult="^#1# Mult",
             a_emult_minus="-^#1# Mult",
+			a_glop="+#1# Glop",
+			a_glop_minus="-#1# Glop",
 		}
     }
 }

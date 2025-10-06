@@ -82,10 +82,11 @@ SMODS.Joker:take_ownership('gros_michel', {
         if context.joker_main then
             return {mult = card.ability.extra.mult}
         end
+
         if (
             context.end_of_round
             and context.game_over == false
-            and not context.repetition
+            and context.main_eval
             and not context.blueprint
         ) then
 			if not SMODS.pseudorandom_probability(card, 'gros_michel', 1, card.ability.extra.odds) then
@@ -104,14 +105,16 @@ SMODS.Joker:take_ownership('gros_michel', {
 -- JOKER: Cavendish
 -- Extinct context compatibility
 SMODS.Joker:take_ownership('cavendish', {
+    no_pool_flag = 'cavendish_extinct',
     calculate = function (self, card, context)
         if context.joker_main then
             return {mult = card.ability.extra.Xmult}
         end
+
         if (
             context.end_of_round
             and context.game_over == false
-            and not context.repetition
+            and context.main_eval
             and not context.blueprint
         ) then
 			if not SMODS.pseudorandom_probability(card, 'cavendish', 1, card.ability.extra.odds) then
@@ -127,19 +130,6 @@ SMODS.Joker:take_ownership('cavendish', {
     end
 }, true)
 
--- STICKER: Eternal
--- Prevent it from applying to cards with Banana sticker
-SMODS.Sticker:take_ownership('eternal', {
-    should_apply = function (self, card, center, area, bypass_reroll)
-        return (
-            G.GAME.modifiers.enable_eternals_in_shop
-            and not card.perishable
-            and not card.kali_stickernana
-            and card.config.center.eternal_compat
-        )
-    end
-}, true)
-
 -- SCORING PARAMETER: Mult
 -- Exponential mult
 local sp_mult_calc_hook = SMODS.Scoring_Parameters.mult.calc_effect
@@ -148,19 +138,15 @@ SMODS.Scoring_Parameter:take_ownership('mult', {
         if (key == 'emult' or key == 'e_mult' or key == 'Emult_mod') then
             if effect.card and effect.card ~= scored_card then juice_card(effect.card) end
             self:modify(self.current^amount - self.current)
-            if not effect.remove_default_message then
-                if from_edition then
-                    card_eval_status_text(scored_card, 'jokers', nil, percent, nil, {message = localize{type='variable',key= amount > 0 and 'a_emult' or 'a_emult_minus',vars={amount}}, Emult_mod =  amount, colour =  G.C.DARK_EDITION, edition = true})
-                else
-                    if key ~= 'Emult_mod' then
-                        if effect.emult_message then
-                            card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.emult_message)
-                        else
-                            card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'e_mult', amount, percent)
-                        end
-                    end
-                end
-            end
+            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
+                message = localize{
+                    type = 'variable',
+                    key = amount > 0 and 'a_emult' or 'a_emult_minus',
+                    vars = {number_format(amount)}
+                },
+                colour = self.colour,
+                sound = 'multhit2'
+            })
             return true
         end
         return sp_mult_calc_hook(self, effect, scored_card, key, amount, from_edition)

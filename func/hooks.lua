@@ -35,6 +35,19 @@ function level_up_hand(card, hand, instant, amount)
     }))
 end
 
+-- Hook to add card perma glop values to UI
+local gencardui_hook = generate_card_ui
+function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end,card)
+    full_UI_table = gencardui_hook(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end,card)
+    if card and card.ability and card.ability.perma_glop then
+        local desc_nodes = full_UI_table.main
+        if card.ability.perma_glop ~= 0 then
+            localize{type = 'other', key = 'card_extra_glop', nodes = desc_nodes, vars = {card.ability.perma_glop}}
+        end
+    end
+    return full_UI_table
+end
+
 
 ---------------------
 ---- CARD OBJECT ----
@@ -73,6 +86,15 @@ function Card:use_consumeable(area, copier)
     else
         card_useconsumeable_hook(self, area, copier)
     end
+end
+
+-- New method: get_glop()
+
+-- Get the amount of glop applied to a playing card.
+---@return integer
+function Card:get_glop()
+    if self.debuff then return 0 end
+    return (self.ability.perma_glop or 0)
 end
 
 
