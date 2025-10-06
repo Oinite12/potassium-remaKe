@@ -45,7 +45,7 @@ SMODS.Consumable {
             hand_prop.kali_extra_glop = hand_prop.kali_extra_glop + card.ability.extra.glop
             SMODS.Scoring_Parameters.kali_glop:level_up_hand(0, hand_prop)
         end
-        
+
         Glop_f.end_level_up_hand_animation{
             scoring_params = current_scoring_params
         }
@@ -102,6 +102,33 @@ SMODS.Consumable {
     atlas = "consumables",
     pos = {x = 2, y = 1},
 
+    add_to_deck = function (self, card, from_debuff)
+        for _,consumable in ipairs(G.consumeables.cards) do
+            if consumable.config.center.key == 'c_kali_ambrosia' then
+                return
+            end
+        end
+
+        -- Juice evolvable cards until all Ambrosia are removed
+        local evo_table = Potassium.banana_evolutions
+        G.GAME.juice_banana_cards = true
+        for _,joker in ipairs(G.jokers.cards) do
+            if evo_table[joker.config.center.key] then
+                juice_card_until(joker, function ()
+                    return G.GAME.juice_banana_cards
+                end, true)
+            end
+        end
+    end,
+    remove_from_deck = function (self, card, from_debuff)
+        for _,consumable in ipairs(G.consumeables.cards) do
+            if consumable.config.center.key == 'c_kali_ambrosia' then
+                return
+            end
+        end
+        G.GAME.juice_banana_cards = false
+    end,
+
     can_use = function(self, card)
         local evo_table = Potassium.banana_evolutions
         for _,held_joker in ipairs(G.jokers.cards) do
@@ -155,6 +182,33 @@ SMODS.Consumable {
 
     atlas = "consumables",
     pos = {x = 0, y = 1},
+
+    add_to_deck = function (self, card, from_debuff)
+        for _,consumable in ipairs(G.consumeables.cards) do
+            if consumable.config.center.key == 'c_kali_substance' then
+                return
+            end
+        end
+
+        -- Juice evolvable cards until all Substance are removed
+        local evo_table = Potassium.glop_evolutions
+        G.GAME.juice_glop_cards = true
+        for _,joker in ipairs(G.jokers.cards) do
+            if evo_table[joker.config.center.key] then
+                juice_card_until(joker, function ()
+                    return G.GAME.juice_glop_cards
+                end, true)
+            end
+        end
+    end,
+    remove_from_deck = function (self, card, from_debuff)
+        for _,consumable in ipairs(G.consumeables.cards) do
+            if consumable.config.center.key == 'c_kali_substance' then
+                return
+            end
+        end
+        G.GAME.juice_glop_cards = false
+    end,
 
     can_use = function(self, card)
         local evo_table = Potassium.glop_evolutions
