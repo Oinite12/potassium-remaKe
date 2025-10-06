@@ -69,7 +69,6 @@ payload = '''
 bonus_glop = self.ability.perma_glop ~= 0 and (self.ability.perma_glop) or nil,'''
 match_indent = true
 
-
 # function eval_card
 # Make card perma glop score
 [[patches]]

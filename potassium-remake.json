@@ -1,14 +1,14 @@
 {
-	"id": "potassium",
+	"id": "potassium_re",
 	"name": "Potassium",
 	"display_name": "Potassium",
-	"author": ["FILL THIS IN LATER"],
+	"author": ["Oinite", "cassknows"],
 	"description": "All the bannas and Glop you could ever need!",
 	"prefix": "kali",
 	"main_file": "index.lua",
 	"priority": 0,
 	"badge_colour": "F5D953",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"dependencies": [
 		"Steamodded (>=1.0.0~BETA-0827)"
 	]
