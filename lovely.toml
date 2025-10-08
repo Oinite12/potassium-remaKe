@@ -24,7 +24,9 @@ target = "functions/common_events.lua"
 pattern = '''if delta < 0 then delta = ''..delta; col = G.C.RED'''
 position = "before"
 payload = '''
-delta = tonumber(('%.3f'):format(delta))
+if type(delta) == number then
+    delta = tonumber(('%.3f'):format(delta))
+end
 '''
 match_indent = true
 
