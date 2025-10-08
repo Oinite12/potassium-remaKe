@@ -48,6 +48,35 @@ function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, h
     return full_UI_table
 end
 
+-- Hook to add Glop to hand information
+local uiboxhandrow_hook = create_UIBox_current_hand_row
+function create_UIBox_current_hand_row(handname, simple)
+    local ret = uiboxhandrow_hook(handname, simple)
+    if ret and not simple then
+        ret.nodes[2] = {n=G.UIT.C, config={align = "cm", padding = 0.05, colour = G.C.BLACK,r = 0.1}, nodes={
+            {n=G.UIT.C, config={align = "cm", padding = 0.01, r = 0.1, colour = G.C.CHIPS, minw = 1.1}, nodes={
+              {n=G.UIT.B, config={w = 0.04,h = 0.01}},
+              {n=G.UIT.T, config={text = number_format(G.GAME.hands[handname].chips, 1000000), scale = 0.45, colour = G.C.UI.TEXT_LIGHT}},
+              {n=G.UIT.B, config={w = 0.04,h = 0.01}},
+            }},
+            {n=G.UIT.T, config={text = "X", scale = 0.45, colour = G.C.MULT}},
+            {n=G.UIT.C, config={align = "cm", padding = 0.01, r = 0.1, colour = G.C.MULT, minw = 1.1}, nodes={
+              {n=G.UIT.B, config={w = 0.04,h = 0.01}},
+              {n=G.UIT.T, config={text = number_format(G.GAME.hands[handname].mult, 1000000), scale = 0.45, colour = G.C.UI.TEXT_LIGHT}},
+              {n=G.UIT.B, config={w = 0.04,h = 0.01}},
+            }},
+            {n=G.UIT.T, config={text = "X", scale = 0.45, colour = G.C.MULT}},
+            {n=G.UIT.C, config={align = "cm", padding = 0.01, r = 0.1, colour = G.C.GLOP, minw = 1.1}, nodes={
+              {n=G.UIT.B, config={w = 0.04,h = 0.01}},
+              {n=G.UIT.T, config={text = number_format(G.GAME.hands[handname].kali_glop, 1000000), scale = 0.45, colour = G.C.UI.TEXT_LIGHT}},
+              {n=G.UIT.B, config={w = 0.04,h = 0.01}},
+            }},
+          }}
+    end
+    return ret
+end
+
+
 
 ---------------------
 ---- CARD OBJECT ----
