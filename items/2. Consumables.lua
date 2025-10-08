@@ -255,22 +255,35 @@ SMODS.Consumable {
 SMODS.Consumable {
     set = "Spectral",
     key = "glopularity",
+    loc_vars = function (self, info_queue, card)
+        return {vars = {card.ability.extra.glop}}
+    end,
+    config = {
+        extra = {
+            glop = 0.2
+        }
+    },
 
     atlas = "consumables",
     pos = {x = 1, y = 1},
 
     soul_set = "Planet",
     hidden = true,
-    can_use = function (self, card) return true end,
+    can_use = function (self, card)
+        for _,hand in pairs(G.GAME.hands) do
+            if hand.level > 1 then return true end
+        end
+        return false
+    end,
     use = function (self, card, area, copier)
         local current_scoring_params = Glop_f.current_upgradeable_scoring_parameters()
 
         local spread_glop = 0
         -- Count how much glop to spread
-        for hand_key in pairs(G.GAME.hands) do
-            local hand = G.GAME.hands[hand_key]
+        for _,hand in pairs(G.GAME.hands) do
             local level = hand.level
-            spread_glop = spread_glop + 0.2*(level - math.ceil(level/2))
+            local taken_levels = math.floor(level/2)
+            spread_glop = spread_glop + 0.2*taken_levels
         end
 
         Glop_f.start_level_up_hand_animation{
@@ -291,10 +304,10 @@ SMODS.Consumable {
         }
 
         -- Spread Glop and update hands accordingly
-        for hand_key in pairs(G.GAME.hands) do
-            local hand = G.GAME.hands[hand_key]
+        for hand_key,hand in pairs(G.GAME.hands) do
             hand.kali_extra_glop = hand.kali_extra_glop + spread_glop
-            level_up_hand(card, hand_key, true, -math.ceil(hand.level/2))
+            local taken_levels = math.floor(hand.level/2)
+            level_up_hand(card, hand_key, true, -taken_levels)
         end
     end
 }
