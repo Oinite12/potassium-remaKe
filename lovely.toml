@@ -24,7 +24,7 @@ target = "functions/common_events.lua"
 pattern = '''if delta < 0 then delta = ''..delta; col = G.C.RED'''
 position = "before"
 payload = '''
-if type(delta) == number then
+if type(delta) == 'number' then
     delta = tonumber(('%.3f'):format(delta))
 end
 '''
