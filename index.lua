@@ -202,14 +202,14 @@ local function banana_credits()
     local text_scale = 0.8
     return {n=G.UIT.ROOT, config={align = "cm", padding = 0.2, colour = G.C.BLACK, r = 0.1, emboss = 0.05, minh = 6, minw = 6}, nodes={
 		{n=G.UIT.C, config={align = "cm", padding = 0.05}, nodes = {
-			prepare_header({"Remake Credits"}, text_scale),
+			prepare_header({"Remake credits"}, text_scale),
 			prepare_subheader({
 				"Lead Developer: Oinite",
 				"Lead Designer: cassknows",
 			}, text_scale),
 		}},
 		{n=G.UIT.C, config={align = "cm", padding = 0.05}, nodes = {
-			prepare_header({"Original Potassium credits"}, text_scale),
+			prepare_header({"Original mod credits"}, text_scale),
 			prepare_subheader({"Lead Developer: MathIsFun_"}, text_scale),
 			{n=G.UIT.R, config={align = "cm", padding = 0.1,outline_colour = G.C.JOKER_GREY, r = 0.1, outline = 1}, nodes={
 				{n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
