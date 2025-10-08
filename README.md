@@ -1,7 +1,8 @@
 # potassium-remaKe
-***<u>DISCLAIMER: HIGHLY WIP DOES NOT WORK AT THE MOMENT</u>***
-
 A remake of Potassium, a Balatro mod that has all the bananas and glop you could ever need.
+
+## Motive
+Potassium was released on April Fool's Day 2025; a lot of breaking changes have since been implemented in Steamodded that prevent the original mod from running at all. It also features several overriding changes that makes it less appealing to play with other mods. This remake intends to re-implement Potassium features with modern features, while also making it more friendly to use with other mods. Some content may also be subject to reworks, while other content will not be brought into this remake; this is to improve balance and cross-mod interactions.
 
 ## Technical documentation
 - Jokers that can evolve with Ambrosia (Banana-themed evolutions) can be implemented by adding a key-value pair the table `Potassium.banana_evolutions`, where the key is the key of the initial Joker, and the value is the key of the evolved Joker.
