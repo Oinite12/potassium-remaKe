@@ -23,10 +23,7 @@ function level_up_hand(card, hand, instant, amount)
     end
 
     if not instant then
-        Glop_f.level_up_hand_animation{
-            hand = hand,
-            scoring_params = Glop_f.current_upgradeable_scoring_parameters(hand)
-        }
+        Glop_f.level_up_hand_animation{hand = hand}
     end
 
     G.E_MANAGER:add_event(Event({
@@ -103,15 +100,11 @@ function Card:use_consumeable(area, copier)
     end
     -- END OF RIP FROM SOURCE --
     if self.ability.consumeable.hand_type then
-        local current_scoring_params = Glop_f.current_upgradeable_scoring_parameters()
         Glop_f.start_level_up_hand_animation{
-            hand = self.ability.consumeable.hand_type,
-            scoring_params = current_scoring_params
+            hand = self.ability.consumeable.hand_type
         }
         level_up_hand(self, self.ability.consumeable.hand_type, nil, 1)
-        Glop_f.end_level_up_hand_animation{
-            scoring_params = current_scoring_params
-        }
+        Glop_f.end_level_up_hand_animation{}
     else
         card_useconsumeable_hook(self, area, copier)
     end
@@ -160,4 +153,9 @@ function Game:start_run(...)
         end
         G.GAME.set_permaglop = true
     end
+
+    Glop_f.add_simple_event('after', 1, function ()
+        G.hand_text_area.mult = G.HUD:get_UIE_by_ID('hand_mult_area')
+        G.hand_text_area.chips = G.HUD:get_UIE_by_ID('hand_chips_area')
+    end)
 end

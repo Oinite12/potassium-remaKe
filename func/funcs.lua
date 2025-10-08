@@ -20,12 +20,6 @@ end
 ---@return number
 Glop_f.get_permaglop = function() return G.PROFILES[G.SETTINGS.profile].permaglop or 0 end
 
--- Get the current scoring calculation.
----@return SMODS.Scoring_Calculation
-Glop_f.current_scoring_calculation = function()
-    return getmetatable(G.GAME.current_scoring_calculation).__index
-end
-
 
 
 ---------------------------------
@@ -39,7 +33,7 @@ end
 ---@return string[]
 Glop_f.current_upgradeable_scoring_parameters = function (hand)
     local current_scoring_params = {}
-    for _, param_name in ipairs(Glop_f.current_scoring_calculation().parameters) do
+    for _, param_name in ipairs(G.GAME.current_scoring_calculation.parameters) do
         if hand and G.GAME.hands[hand] then
             if G.GAME.hands[hand][param_name] then
                 table.insert(current_scoring_params, param_name)
@@ -61,7 +55,7 @@ Glop_f.start_level_up_hand_animation = function (args)
     local parameter_text = args.parameter_text or {}
     local all_parameter_text = args.all_parameter_text or ''
     local level_text = args.level_text or (hand and G.GAME.hands[hand].level) or '?'
-    local scoring_params = args.scoring_params or Glop_f.current_scoring_calculation().parameters
+    local scoring_params = Glop_f.current_upgradeable_scoring_parameters()
 
     local init_hand_text = {handname = hand_text, level = level_text}
     for _,param_name in ipairs(scoring_params --[[@as table]]) do
@@ -80,7 +74,7 @@ Glop_f.level_up_hand_animation = function (args)
     local parameter_status_text = args.parameter_status_text or {}
     local all_parameter_status_text = args.all_parameter_status_text or ''
     local level_text = args.level_text or (hand and G.GAME.hands[hand].level) or ''
-    local scoring_params = args.scoring_params or Glop_f.current_scoring_calculation().parameters
+    local scoring_params = Glop_f.current_upgradeable_scoring_parameters()
 
     -- Animations play in order of the `parameters` parameter of the scoring calculation
     for i,param_name in ipairs(scoring_params --[[@as table]]) do
@@ -108,7 +102,7 @@ end
 ---@return nil
 Glop_f.end_level_up_hand_animation = function (args)
     args = args or {}
-    local scoring_params = args.scoring_params or Glop_f.current_scoring_calculation().parameters
+    local scoring_params = Glop_f.current_upgradeable_scoring_parameters()
 
     local post_hand_text = {handname = '', level = ''}
     for _,param_name in ipairs(scoring_params --[[@as table]]) do
