@@ -82,7 +82,7 @@ SMODS.Joker:take_ownership('gros_michel', {
 
             -- Odd is hit
             SMODS.destroy_cards(card, nil, true, true)
-            SMODS.calculate_context({kali_extinct = true, other_card = card})
+            SMODS.calculate_context({kali_extinct = true, other_card = card.config.center.key})
             G.GAME.pool_flags.gros_michel_extinct = true
             return { message = localize('k_extinct_ex') }
         end
@@ -110,7 +110,7 @@ SMODS.Joker:take_ownership('cavendish', {
 
             -- Odd is hit
             SMODS.destroy_cards(card, nil, true, true)
-            SMODS.calculate_context({kali_extinct = true, other_card = card})
+            SMODS.calculate_context({kali_extinct = true, other_card = card.config.center.key})
             G.GAME.pool_flags.cavendish_extinct = true
             return { message = localize('k_extinct_ex') }
         end

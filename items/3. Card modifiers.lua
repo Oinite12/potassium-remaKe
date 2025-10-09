@@ -101,18 +101,21 @@ SMODS.Sticker {
     atlas = "stickers",
     pos = {x = 0, y = 0},
 
-    needs_enabled_flag = true,
+    needs_enable_flag = true,
+    rate = 0.3,
     should_apply = function (self, card, center, area, bypass_reroll)
         return (
             SMODS.Sticker.should_apply(self, card, center, area, bypass_reroll)
-            and G.GAME.modifiers.enable_stickernana
             and not card.ability.eternal
         )
     end,
-    rate = 0.3,
-    sets = {
-        Joker = true
-    },
+    apply = function (self, card, val)
+        Glop_f.add_simple_event(nil, nil, function ()
+            if not card.ability.eternal then
+                SMODS.Sticker.apply(self, card, val)
+            end
+        end)
+    end,
 
     calculate = function(self, card, context)
         if (

@@ -24,6 +24,6 @@ This context occurs when a card goes extinct. It is sent by Gros Michel, Cavendi
 if context.kali_extinct then
 {
     kali_extinct = true,
-    other_card = card
+    other_card = card_key
 }
 ```

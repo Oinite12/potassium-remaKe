@@ -11,8 +11,9 @@ SMODS.Stake {
     sticker_pos = {x = 0, y = 0},
 
     applied_stakes = { "gold" },
+    prefix_config = { applied_stakes = { mod = false } },
 
     modifiers = function ()
-        G.GAME.modifiers.enable_stickernana = true
+        G.GAME.modifiers.enable_kali_stickernana = true
     end,
 }

@@ -113,7 +113,7 @@ SMODS.Joker {
 
             -- Odd is hit
             SMODS.destroy_cards(card, nil, true, true)
-            SMODS.calculate_context({kali_extinct = true, other_card = card})
+            SMODS.calculate_context({kali_extinct = true, other_card = card.config.center.key})
             return { message = localize('k_extinct_ex') }
         end
     end,
@@ -356,7 +356,7 @@ SMODS.Joker {
         ) then
             SMODS.destroy_cards(context.scoring_hand, nil, true, true)
             SMODS.destroy_cards(card, nil, true, true)
-            SMODS.calculate_context({kali_extinct = true, other_card = card})
+            SMODS.calculate_context({kali_extinct = true, other_card = card.config.center.key})
             return { message = localize('k_extinct_ex') }
         end
     end,
@@ -579,7 +579,7 @@ SMODS.Joker {
 
             -- Odd is hit
             SMODS.destroy_cards(card, nil, true, true)
-            SMODS.calculate_context({kali_extinct = true, other_card = card})
+            SMODS.calculate_context({kali_extinct = true, other_card = card.config.center.key})
             return { message = localize('k_extinct_ex') }
         end
     end,
