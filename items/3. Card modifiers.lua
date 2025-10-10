@@ -29,7 +29,7 @@ SMODS.Edition {
                 for return_key, value in pairs(something) do
                     if calc_keys.additive[return_key] then
                         -- "Normalize" value to significand (scientific notation)
-                        local reduced_value = value/10^(math.floor(math.log(tonumber(value), 10))+1)
+                        local reduced_value = value/10^(math.floor(math.log(tonumber(value) --[[@as number]], 10))+1)
                         glop = glop + reduced_value
                         increased = true
                     elseif calc_keys.multiplicative[return_key] then

@@ -83,7 +83,7 @@ function get_new_boss()
                 eligible_bosses[key] = true
             end
         end
-        
+
         for key in pairs(G.GAME.banned_keys) do
             eligible_bosses[key] = nil
         end
@@ -95,7 +95,7 @@ function get_new_boss()
                 if eligible_bosses[key] <= min_use then
                     min_use = eligible_bosses[key]
                 end
-            end 
+            end
         end
         for key in pairs(eligible_bosses) do
             if eligible_bosses[key] > min_use then
@@ -103,7 +103,7 @@ function get_new_boss()
             end
         end
 
-        local _, boss = pseudorandom_element(eligible_bosses, 'bananaboss_select')
+        local _, boss = pseudorandom_element(eligible_bosses, 'bananaboss_select') --[[@as string]]
         G.GAME.bosses_used[boss] = G.GAME.bosses_used[boss] + 1
         return boss
     else return getboss_hook() end
