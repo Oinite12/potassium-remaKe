@@ -24,6 +24,7 @@ end
 SMODS.Joker {
     key = "plantation",
     loc_vars = function (self, info_queue, card)
+        Glop_f.stickernana_infoqueue(card, info_queue)
         return {vars = {
             card.ability.extra.xmult
         }}
@@ -119,6 +120,11 @@ SMODS.Joker {
 SMODS.Joker {
     key = "banana_bread",
     loc_vars = function (self, info_queue, card)
+        table.insert(info_queue, {
+            key = 'kali_banana_bread_extincting_cards',
+            set = "Other"
+        })
+        Glop_f.stickernana_infoqueue(card, info_queue)
         return {vars = {
             card.ability.extra.xmult_mod,
             card.ability.extra.xmult,
@@ -362,6 +368,7 @@ SMODS.Joker {
 SMODS.Joker {
     key = "potassium_bottle",
     loc_vars = function (self, info_queue, card)
+        Glop_f.stickernana_infoqueue(card, info_queue)
         local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'kali_potassiumbottle')
         return {vars = {
             card.ability.extra.retriggers,
@@ -462,6 +469,9 @@ SMODS.Joker {
 --------
 SMODS.Joker {
     key = "glegg",
+    loc_vars = function (self, info_queue, card)
+        table.insert(info_queue, G.P_CENTERS.c_kali_glopur)
+    end,
 
     atlas = "bananokers",
     pos = {x=4, y=1},

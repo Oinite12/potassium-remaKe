@@ -114,9 +114,9 @@ end
 
 
 
----------------------------------
----- LEVEL UP HAND ANIMATION ----
----------------------------------
+-----------------------
+---- MISCELLANEOUS ----
+-----------------------
 
 -- Determine if the card with a Banana sticker hits the chance to go extinct.
 ---@param card Card
@@ -138,4 +138,17 @@ Glop_f.evaluate_extinction = function (card, seed, num, denom, is_banana)
     end
 
     return {message = localize("k_extinct_ex")}, true
+end
+
+-- Inserts Stickernana information into the info qeuue.
+---@param card Card
+---@param info_queue table
+---@return nil
+Glop_f.stickernana_infoqueue = function (card, info_queue)
+    local numerator, denominator = SMODS.get_probability_vars(card, 1, 10, 'stickernana')
+    table.insert(info_queue, {
+        set = "Other",
+        key = "kali_stickernana",
+        vars = {numerator, denominator}
+    })
 end

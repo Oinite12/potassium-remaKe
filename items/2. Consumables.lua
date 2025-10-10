@@ -87,12 +87,7 @@ SMODS.Consumable {
     set = "Spectral",
     key = "ambrosia",
     loc_vars = function (self, info_queue, card)
-        local numerator, denominator = SMODS.get_probability_vars(card, 1, 10, 'stickernana')
-        table.insert(info_queue, {
-            set = "Other",
-            key = "kali_stickernana",
-            vars = {numerator, denominator}
-        })
+        Glop_f.stickernana_infoqueue(card, info_queue)
     end,
 
     atlas = "consumables",

@@ -22,7 +22,7 @@ return {
 				name = "Banana Bread",
 				text = {
 					"Gain {X:mult,C:white}X#1# {} Mult when a",
-					"{C:attention}Banana{} card goes extinct",
+					"{C:attention}Banana card{} goes extinct",
 					"{C:inactive}(Currently: {X:mult,C:white}X#2# {C:inactive} Mult)",
 				}
 			},
@@ -260,7 +260,16 @@ return {
 					"{C:green}#1# in #2#{} chance",
 					"to destroy card",
 				},
-			}
+			},
+			kali_banana_bread_extincting_cards = {
+				name = "Extincting Banana cards",
+				text = {
+					"Gros Michel, Cavendish,",
+					"Blue Java, Potassium in a Bottle,",
+					"Banana Bean, Glopendish,",
+					"cards with Banana sticker"
+				}
+			},
         }
     },
     misc = {

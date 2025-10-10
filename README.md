@@ -19,7 +19,7 @@ Potassium was released on April Fool's Day 2025; a lot of breaking changes have 
 - This remake of Potassium does not feature permanent glop via Glopway (as it was largely a joke-y feature), however if you wish to use the mechanic for whatever reason, permanent glop can be increased per save via the function `Glop_f.increase_permaglop(number)`; all hands are updated in the current and future runs accordingly. Permaglop is saved in the profile parameter `G.PROFILES[G.SETTINGS.profile].permaglop`, but the shorthand `Glop_f.get_permaglop()`.
 
 ### Contexts
-This context occurs when a card goes extinct. It is sent by Gros Michel, Cavendish, Blue Java, Banana Bean, and anything with the Banana sticker.
+This context occurs when a card goes extinct. It is sent by Gros Michel, Cavendish, Blue Java, Potassium in a Bottle, Banana Bean, Glopendish, and anything with the Banana sticker.
 ```lua
 if context.kali_extinct then
 {
