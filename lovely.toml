@@ -85,3 +85,71 @@ if glop > 0 then
     ret.playing_card.glop = glop
 end
 '''
+
+# -- BANANA BLINDS --
+
+
+
+# function create_UIBox_your_collection_blinds
+# Banana blinds are sorted later
+[[patches]]
+[patches.pattern]
+target = '''functions/UI_definitions.lua'''
+pattern = '''
+table.sort(blind_tab, function(a, b) return a.order + (a.boss and a.boss.showdown and 1000 or 0) < b.order + (b.boss and b.boss.showdown and 1000 or 0) end)
+'''
+position = "after"
+payload = '''
+table.sort(blind_tab, function(a, b) return a.order + (a.boss and a.boss.banana and 1000 or 0) < b.order + (b.boss and b.boss.banana and 1000 or 0) end)
+'''
+match_indent = true
+
+# function ease_background_colour_blind
+# Unique background for banana blinds
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+if v.boss.showdown then 
+    ease_background_colour{new_colour = G.C.BLUE, special_colour = G.C.RED, tertiary_colour = darken(G.C.BLACK, 0.4), contrast = 3}
+    return
+'''
+position = "after"
+payload = '''
+elseif v.boss.banana then 
+    ease_background_colour{new_colour = G.C.BANAN2, special_colour = G.C.BANAN1, tertiary_colour = darken(G.C.BLACK, 0.4), contrast = 3}
+    return
+'''
+match_indent = true
+
+# function Blind:set_blind
+# Also cause background spin on banana blinds
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''
+G.ARGS.spin.real = (G.SETTINGS.reduced_motion and 0 or 1)*(self.config.blind.boss and (self.config.blind.boss.showdown and 0.5 or 0.25) or 0)
+'''
+position = "after"
+payload = '''
+if self.config.blind.boss and self.config.blind.boss.banana then
+    G.ARGS.spin.real = (G.SETTINGS.reduced_motion and 0 or 1)*0.5
+end
+'''
+match_indent = true
+
+# function Blind:load
+# Also cause background spin on banana blinds
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''
+G.ARGS.spin.real = (G.SETTINGS.reduced_motion and 0 or 1)*(self.config.blind.boss and (self.config.blind.boss.showdown and 1 or 0.3) or 0)
+'''
+position = "after"
+payload = '''
+if self.config.blind.boss and self.config.blind.boss.banana then
+    G.ARGS.spin.real = (G.SETTINGS.reduced_motion and 0 or 1)*1
+end
+'''
+match_indent = true
