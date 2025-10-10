@@ -224,6 +224,22 @@ return {
 				}
 			}
 		},
+		Blind = {
+			bl_kali_blindnana = {
+				name = "The Banana",
+				text = {
+					"One random Joker replaced",
+					"with Gros Michel every hand",
+				}
+			},
+			bl_kali_peel = {
+				name = "The Peel",
+				text = {
+					"#1# in #2# chance for Jokers to",
+					"go extinct when triggered",
+				}
+			}
+		},
         Other = {
 			card_extra_glop = {
 				text = {

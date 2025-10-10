@@ -45,11 +45,11 @@ SMODS.PokerHand {
 
     visible = false,
     example = {
-        {'S_Q',  true },
-        {'H_J',  true },
+        {'S_Q', true },
+        {'H_J', true },
         {'C_T', true },
-        {'D_2',  true },
-        {'S_7',  false}
+        {'D_2', true },
+        {'S_7', false}
     },
 
     evaluate = function (parts, hand)

@@ -2,6 +2,7 @@
 
 -- 1. PERMAGLOP
 -- 2. LEVEL UP HAND ANIMATION
+-- 3. MISCELLANEOUS
 
 
 
@@ -109,4 +110,32 @@ Glop_f.end_level_up_hand_animation = function (args)
         post_hand_text[param_name] = SMODS.Scoring_Parameters[param_name].default_value
     end
     update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, post_hand_text)
+end
+
+
+
+---------------------------------
+---- LEVEL UP HAND ANIMATION ----
+---------------------------------
+
+-- Determine if the card with a Banana sticker hits the chance to go extinct.
+---@param card Card
+---@param seed string
+---@param num number
+---@param denom number
+---@param is_banana? boolean If true, context.kali_extinct is calculated.
+---@return { message: string } | table | nil message
+---@return boolean went_extinct
+Glop_f.evaluate_extinction = function (card, seed, num, denom, is_banana)
+    if not SMODS.pseudorandom_probability(card, seed, num, denom) then
+        return {message = localize("k_safe_ex")}, false
+    end
+
+    -- Odd is hit
+    SMODS.destroy_cards(card, nil, true, true)
+    if is_banana then
+        SMODS.calculate_context({kali_extinct = true, other_card = card.config.center.key})
+    end
+
+    return {message = localize("k_extinct_ex")}, true
 end

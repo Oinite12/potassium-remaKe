@@ -76,15 +76,9 @@ SMODS.Joker:take_ownership('gros_michel', {
             and context.main_eval
             and not context.blueprint
         ) then
-			if not SMODS.pseudorandom_probability(card, 'gros_michel', 1, card.ability.extra.odds) then
-				return { message = localize('k_safe_ex') }
-			end
-
-            -- Odd is hit
-            SMODS.destroy_cards(card, nil, true, true)
-            SMODS.calculate_context({kali_extinct = true, other_card = card.config.center.key})
-            G.GAME.pool_flags.gros_michel_extinct = true
-            return { message = localize('k_extinct_ex') }
+            local message, went_extinct = Glop_f.evaluate_extinction(card, 'gros_michel', 1, card.ability.extra.odds, true)
+            if went_extinct then G.GAME.pool_flags.gros_michel_extinct = true end
+            return message
         end
     end
 }, true)
@@ -104,15 +98,9 @@ SMODS.Joker:take_ownership('cavendish', {
             and context.main_eval
             and not context.blueprint
         ) then
-			if not SMODS.pseudorandom_probability(card, 'cavendish', 1, card.ability.extra.odds) then
-				return { message = localize('k_safe_ex') }
-			end
-
-            -- Odd is hit
-            SMODS.destroy_cards(card, nil, true, true)
-            SMODS.calculate_context({kali_extinct = true, other_card = card.config.center.key})
-            G.GAME.pool_flags.cavendish_extinct = true
-            return { message = localize('k_extinct_ex') }
+            local message, went_extinct = Glop_f.evaluate_extinction(card, 'cavendish', 1, card.ability.extra.odds, true)
+            if went_extinct then G.GAME.pool_flags.cavendish_extinct = true end
+            return message
         end
     end
 }, true)

@@ -107,14 +107,8 @@ SMODS.Joker {
             and context.main_eval
             and not context.blueprint
         ) then
-			if not SMODS.pseudorandom_probability(card, 'kali_bluejava', 1, card.ability.extra.odds) then
-				return { message = localize('k_safe_ex') }
-			end
-
-            -- Odd is hit
-            SMODS.destroy_cards(card, nil, true, true)
-            SMODS.calculate_context({kali_extinct = true, other_card = card.config.center.key})
-            return { message = localize('k_extinct_ex') }
+            local message = Glop_f.evaluate_extinction(card, 'kali_bluejava', 1, card.ability.extra.odds, true)
+            return message
         end
     end,
 }
@@ -410,6 +404,7 @@ SMODS.Joker {
 
             -- Odd is hit
             SMODS.destroy_cards(card, nil, true, true)
+            SMODS.calculate_context({kali_extinct = true, other_card = card.config.center.key})
             return { message = localize('k_nope_ex') }
         end
     end,
@@ -573,14 +568,8 @@ SMODS.Joker {
             and context.main_eval
             and not context.blueprint
         ) then
-			if not SMODS.pseudorandom_probability(card, 'kali_glopendish_destroyself', 1, card.ability.extra.odds_destroy_self) then
-				return { message = localize('k_safe_ex') }
-			end
-
-            -- Odd is hit
-            SMODS.destroy_cards(card, nil, true, true)
-            SMODS.calculate_context({kali_extinct = true, other_card = card.config.center.key})
-            return { message = localize('k_extinct_ex') }
+            local message = Glop_f.evaluate_extinction(card, 'kali_glopendish_destroyself', 1, card.ability.extra.odds_destroy_self, true)
+            return message
         end
     end,
 }

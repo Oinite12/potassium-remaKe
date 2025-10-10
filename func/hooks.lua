@@ -73,6 +73,42 @@ function create_UIBox_current_hand_row(handname, simple)
     return ret
 end
 
+-- Hook to select Banana blinds on Ante 12
+local getboss_hook = get_new_boss
+function get_new_boss()
+    if G.GAME.round_resets.ante == 12 then
+        local eligible_bosses = {}
+        for key,blind in pairs(G.P_BLINDS) do
+            if blind.boss and blind.boss.banana then
+                eligible_bosses[key] = true
+            end
+        end
+        
+        for key in pairs(G.GAME.banned_keys) do
+            eligible_bosses[key] = nil
+        end
+
+        local min_use = 100
+        for key,use_count in pairs(G.GAME.bosses_used) do
+            if eligible_bosses[key] then
+                eligible_bosses[key] = use_count
+                if eligible_bosses[key] <= min_use then
+                    min_use = eligible_bosses[key]
+                end
+            end 
+        end
+        for key in pairs(eligible_bosses) do
+            if eligible_bosses[key] > min_use then
+                eligible_bosses[key] = nil
+            end
+        end
+
+        local _, boss = pseudorandom_element(eligible_bosses, 'bananaboss_select')
+        G.GAME.bosses_used[boss] = G.GAME.bosses_used[boss] + 1
+        return boss
+    else return getboss_hook() end
+end
+
 
 
 ---------------------
