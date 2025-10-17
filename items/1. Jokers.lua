@@ -192,6 +192,40 @@ SMODS.Joker {
     end,
 }
 
+------------------
+-- Poppies, Dreamt
+------------------
+SMODS.Joker {
+    key = "poppies_dreamt",
+    loc_vars = function (self, info_queue, card)
+        return {vars = {
+            card.ability.extra.xmult,
+            card.ability.extra.glop
+        }}
+    end,
+    config = {
+        extra = {
+            xmult = 3,
+            glop = 1
+        }
+    },
+
+    atlas = "bananokers",
+    pos = {x=4, y=2},
+
+    rarity = 2,
+    cost = 6,
+
+    calculate = function (self, card, context)
+        if context.joker_main and context.poker_hands and next(context.poker_hands["kali_virgin_bouquet"]) then
+			return {
+				xmult = card.ability.extra.xmult,
+                glop = card.ability.extra.glop,
+			}
+		end
+    end,
+}
+
 --------
 
 -------

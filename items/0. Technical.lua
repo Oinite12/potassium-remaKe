@@ -19,7 +19,7 @@ SMODS.PokerHandPart {
             -- A rank is not tracked if the rank is not in the hand
             track_ranks[12]     -- queens
             and track_ranks[11] -- jacks
-            and track_ranks[10] -- 10s
+            and track_ranks[10] -- ...10s
             and track_ranks[2]  -- ok come on, what do you think
         ) then return {} end
 

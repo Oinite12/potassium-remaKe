@@ -35,6 +35,14 @@ return {
 					"{C:inactive}(Currently {C:glop}+#2#{C:inactive} Glop)",
 				}
 			},
+			j_kali_poppies_dreamt = {
+				name = "Poppies, Dreamt",
+				text = {
+                    "{X:mult,C:white}X#1# {} Mult and {C:glop}+#2# {}Glop",
+                    "if poker hand contains a",
+					"{C:attention}Queen{}, {C:attention}Jack{}, {C:attention}10{}, and {C:attention}2",
+				}
+			},
 
 			j_kali_begg = {
 				name = "Begg",
