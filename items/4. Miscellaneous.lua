@@ -66,6 +66,10 @@ SMODS.Blind {
     end
 }
 
+-----------
+-- BLIND
+-- The Peel
+-----------
 SMODS.Blind {
     key = "peel",
     boss = {banana = true},
