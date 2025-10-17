@@ -36,12 +36,17 @@ end
 
 -- Loads all Lua files in a directory.
 ---@param folder_name string
+---@param condition_function? fun(file_name: string): boolean
 ---@return nil
-function Glop_f.load_directory(folder_name)
+function Glop_f.load_directory(folder_name, condition_function)
 	local mod_path = Potassium.mod_path
 	local files = NFS.getDirectoryItems(mod_path .. folder_name)
+
 	for _,file_name in ipairs(files) do
-		if file_name:match(".lua$") then
+		local condition_is_met = true
+		if condition_function then condition_is_met = condition_function(file_name) end
+
+		if file_name:match(".lua$") and condition_is_met then
 			print("[POTASSIUM] Loading file " .. file_name)
 			local file_format = ("%s/%s")
 			local file_func, err = SMODS.load_file(file_format:format(folder_name, file_name))
@@ -54,6 +59,10 @@ end
 Glop_f.load_directory("load_assets")
 Glop_f.load_directory("func")
 Glop_f.load_directory("items")
+-- Cross-mod files (named with mod ID) only loaded if mod is loaded
+Glop_f.load_directory("cross-mod", function (file_name)
+	return (SMODS.Mods[file_name] or {}).can_load
+end)
 
 -------------
 -- EVOLUTIONS
