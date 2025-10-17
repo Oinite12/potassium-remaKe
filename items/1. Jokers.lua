@@ -718,12 +718,38 @@ SMODS.Joker {
 SMODS.Joker {
     key = "glopmother",
     loc_vars = function (self, info_queue, card)
-        return {key = card.ability.extra.fake_out and "j_kali_glopmother_fakeout" or nil}
+        local key = card.ability.extra.j_kali_glopmother
+        local value = card.ability.extra.eglop
+
+        if not G.PROFILES[G.SETTINGS.profile].discovered_sfark then
+            if card.ability.extra.fake_out then
+                key = 'j_kali_glopmother_sfark'
+                value = card.ability.extra.xsfark
+            else
+                key = 'j_kali_glopmother'
+                value = card.ability.extra.eglop
+            end
+        else
+            if card.ability.extra.mode == "glop" then
+                key = 'j_kali_glopmother_true'
+                value = card.ability.extra.eglop
+            elseif card.ability.extra.mode == "sfark" then
+                key = 'j_kali_glopmother_sfark_true'
+                value = card.ability.extra.xsfark
+            end
+        end
+
+        return {
+            key = key,
+            vars = {value}
+        }
     end,
     config = {
         extra = {
             fake_out = true,
-            eglop = 2
+            mode = "glop", -- or "sfark"
+            eglop = 2,
+            xsfark = 4
         }
     },
 
@@ -737,10 +763,54 @@ SMODS.Joker {
 	perishable_compat = false,
     in_pool = function() return false end,
 
+    add_to_deck = function (self, card, from_debuff)
+        if (
+            G.PROFILES[G.SETTINGS.profile].discovered_sfark
+            and G.GAME.current_scoring_calculation.key ~= "kali_sfark"
+        ) then
+            SMODS.set_scoring_calculation('kali_sfark')
+        end
+    end,
+    remove_from_deck = function (self, card, from_debuff)
+        if #SMODS.find_card('j_kali_glopmother') == 0 then
+            SMODS.set_scoring_calculation('kali_glop')
+        end
+    end,
     calculate = function (self, card, context)
         if context.joker_main then
+            if (
+                not card.ability.extra.fake_out
+                and not G.PROFILES[G.SETTINGS.profile].discovered_sfark
+            ) then
+                Glop_f.add_simple_event('after', 1, function ()
+                    SMODS.set_scoring_calculation('kali_sfark')
+                    G.HUD:get_UIE_by_ID('hand_kali_sfark_area'):juice_up()
+                    play_sound('highlight2')
+                end)
+                delay(2)
+                G.PROFILES[G.SETTINGS.profile].discovered_sfark = true
+            end
+
             card.ability.extra.fake_out = false
-            return {eglop = 2}
+
+            if card.ability.extra.mode == "glop" then
+                return {eglop = card.ability.extra.eglop}
+            elseif card.ability.extra.mode == "sfark" then
+                return {xsfark = card.ability.extra.xsfark}
+            end
+        end
+
+        if context.after and context.main_eval and context.cardarea == G.jokers then
+            Glop_f.add_simple_event(nil, nil, function ()
+                card.ability.extra.mode = (
+                    card.ability.extra.mode == "glop"
+                    and "sfark"
+                    or "glop"
+                )
+                card:juice_up()
+                play_sound('tarot1')
+                delay(0.5)
+            end)
         end
     end,
 }

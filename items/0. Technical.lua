@@ -63,7 +63,7 @@ SMODS.PokerHand {
 --------------------
 SMODS.Scoring_Parameter {
     key = 'glop',
-    default_value = 0,
+    default_value = 1,
     colour = G.C.UI_GLOP,
 
     -- glop values for all hands added in func/post-load.lua
@@ -118,7 +118,66 @@ SMODS.Scoring_Parameter {
                     vars = {'^'..number_format(amount)}
                 },
                 colour = self.colour,
-                sound = 'kali_glop'
+                sound = 'kali_glop_edition'
+            })
+            return true
+        end
+    end
+}
+
+--------------------
+-- SCORING PARAMETER
+-- Sfark
+--------------------
+SMODS.Scoring_Parameter {
+    key = 'sfark',
+    default_value = 1,
+    colour = G.C.SFARK,
+
+    calculation_keys = {'sfark', 'xsfark', 'esfark'},
+    calc_effect = function (self, effect, scored_card, key, amount, from_edition)
+        if not amount then return end
+
+        if effect.card and effect.card ~= scored_card then juice_card(effect.card) end
+
+        if key == 'sfark' and amount ~= 0 then
+            self:modify(amount)
+            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
+                message = localize{
+                    type = 'variable',
+                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
+                    vars = {number_format(amount)}
+                },
+                colour = self.colour,
+                sound = 'kali_glop_edition'
+            })
+            return true
+        end
+
+        if key == 'xsfark' and amount ~= 1 then
+            self:modify(self.current*(amount - 1))
+            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
+                message = localize{
+                    type = 'variable',
+                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
+                    vars = {'X'..number_format(amount)}
+                },
+                colour = self.colour,
+                sound = 'kali_glop_edition'
+            })
+            return true
+        end
+
+        if key == 'esfark' and amount ~= 1 then
+            self:modify(self.current^amount - self.current)
+            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
+                message = localize{
+                    type = 'variable',
+                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
+                    vars = {'^'..number_format(amount)}
+                },
+                colour = self.colour,
+                sound = 'kali_glop_edition'
             })
             return true
         end
@@ -172,5 +231,73 @@ SMODS.Scoring_Calculation {
 				})
 			}},
 		}}
+    end
+}
+
+----------------------
+-- SCORING CALCULATION
+-- Sfark
+----------------------
+SMODS.Scoring_Calculation {
+    key = 'sfark',
+    parameters = {'mult', 'chips', 'kali_glop', 'kali_sfark'},
+    func = function (self, chips, mult, flames) --[[@overload fun(self, chips, mult, flames): number]]
+        local glop  = SMODS.get_scoring_parameter('kali_glop',  flames)
+        local sfark = SMODS.get_scoring_parameter('kali_sfark', flames)
+        if type(glop)  == "string" then return 0 end
+        if type(sfark) == "string" then return 0 end
+        return chips * mult * glop * sfark
+    end,
+    replace_ui = function (self) --[[@overload fun(self): table]]
+        local scale = 0.25
+        local w = 2.0
+        local h = 0.6
+        return
+        {n=G.UIT.R, config={align = "cm", minh = 1, padding = 0.1}, nodes={
+            {n=G.UIT.C, config={align = 'cm'}, nodes = { -- left side
+                {n=G.UIT.R, config={align = 'cm', id = 'hand_chips'}, nodes={
+                    SMODS.GUI.score_container({
+                        type = 'chips',
+                        text = 'chip_text',
+                        align = 'cr',
+                        w = w,
+                        h = h,
+                        scale = scale
+                    })
+                }},
+                {n=G.UIT.R, config={align = 'cm', id = 'hand_kali_glop'}, nodes={
+                    SMODS.GUI.score_container({
+                        type = 'kali_glop',
+                        align = 'cr',
+                        w = w,
+                        h = h,
+                        scale = scale
+                    })
+                }},
+            }},
+            {n=G.UIT.C, config={align = 'cm'}, nodes = { -- middle
+                SMODS.GUI.operator(0.5)
+            }},
+            {n=G.UIT.C, config={align = 'cm'}, nodes = { -- right side
+                {n=G.UIT.R, config={align = 'cm', id = 'hand_mult'}, nodes={
+                    SMODS.GUI.score_container({
+                        type = 'mult',
+                        align = 'cl',
+                        w = w,
+                        h = h,
+                        scale = scale
+                    })
+                }},
+                {n=G.UIT.R, config={align = 'cm', id = 'hand_kali_sfark'}, nodes={
+                    SMODS.GUI.score_container({
+                        type = 'kali_sfark',
+                        align = 'cl',
+                        w = w,
+                        h = h,
+                        scale = scale
+                    })
+                }},
+            }},
+        }}
     end
 }

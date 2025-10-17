@@ -102,7 +102,8 @@ Potassium.calc_keys.all            = {}
 for _, key in ipairs({
 	'chips', 'h_chips', 'chip_mod',
 	'mult', 'h_mult', 'mult_mod',
-	'glop'
+	'glop',
+	'sfark'
 }) do
 	Potassium.calc_keys.additive[key] = true
 	Potassium.calc_keys.all[key] = true
@@ -112,7 +113,8 @@ end
 for _, key in ipairs({
 	'x_chips', 'xchips', 'Xchip_mod',
     'x_mult', 'Xmult', 'xmult', 'x_mult_mod', 'Xmult_mod',
-	'xglop'
+	'xglop',
+	'xsfark'
 }) do
 	Potassium.calc_keys.multiplicative[key] = true
 	Potassium.calc_keys.all[key] = true
@@ -122,7 +124,8 @@ end
 for _, key in ipairs({
 	'e_mult', 'emult', 'Emult_mod',
 	'e_chips', 'echips', 'Echip_mod',
-	'eglop'
+	'eglop',
+	'esfark'
 }) do
 	Potassium.calc_keys.exponential[key] = true
 	Potassium.calc_keys.all[key] = true

@@ -128,19 +128,38 @@ return {
 					"{C:inactive,s:0.8}Fresh off the clob",
 				}
 			},
+
+			-- Glopmother texts START --
 			j_kali_glopmother = {
 				name = "Glopmother",
 				text = {
-					"{X:glop,C:white,E:1,s:1.5}^2{s:1.5,E:1,C:dark_edition} Glop"
+					"{X:glop,C:white,E:1,s:1.5}^#1#{s:1.5,E:1,C:dark_edition} Glop"
 				}
 			},
-			j_kali_glopmother_fakeout = {
+			j_kali_glopmother_sfark = {
 				name = "Glopmother",
 				text = {
-					"Playing cards give",
-					"{X:sfark,C:white}X7{} Sfark when scored"
+					"{X:sfark,C:white}X#1#{} Sfark"
 				}
 			},
+			j_kali_glopmother_true = {
+				name = "Glopmother",
+				text = {
+					"{X:glop,C:white,E:1,s:1.5}^#1#{s:1.5,E:1,C:dark_edition} Glop",
+					"Effect changes",
+					"every {C:attention}hand"
+				}
+			},
+			j_kali_glopmother_sfark_true = {
+				name = "Glopmother",
+				text = {
+					"{X:sfark,C:white,E:1,s:1.5}X#1#{E:1,s:1.5,C:dark_edition} Sfark",
+					"Effect changes",
+					"every {C:attention}hand"
+				}
+			},
+			-- END Glopmother texts --
+
 			j_kali_glopku = {
 				name = "Glopku",
 				text = {
