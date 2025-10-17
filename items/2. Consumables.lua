@@ -262,7 +262,7 @@ SMODS.Consumable {
     hidden = true,
     can_use = function (self, card)
         for _,hand in pairs(G.GAME.hands) do
-            if hand.level > 1 then return true end
+            if to_big(hand.level) > to_big(1) then return true end
         end
         return false
     end,
