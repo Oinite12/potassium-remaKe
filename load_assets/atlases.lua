@@ -37,3 +37,12 @@ SMODS.Atlas {
     py = 34,
     frames = 21
 }
+
+-----------
+-- Mod icon
+-----------
+SMODS.Atlas {
+    key = "modicon",
+    path = "mod_icon.png",
+    px = 34, py = 34,
+}
