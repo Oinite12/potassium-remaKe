@@ -749,7 +749,8 @@ SMODS.Joker {
             fake_out = true,
             mode = "glop", -- or "sfark"
             eglop = 2,
-            xsfark = 4
+            xsfark = 4,
+            sprite_index = 0
         }
     },
 
@@ -770,6 +771,7 @@ SMODS.Joker {
         ) then
             SMODS.set_scoring_calculation('kali_sfark')
         end
+        card.children.floating_sprite:set_sprite_pos({x = 3 + card.ability.extra.sprite_index, y = 3})
     end,
     remove_from_deck = function (self, card, from_debuff)
         if #SMODS.find_card('j_kali_glopmother') == 0 then
@@ -807,6 +809,13 @@ SMODS.Joker {
                     and "sfark"
                     or "glop"
                 )
+                if G.GAME.current_scoring_calculation.key == "kali_sfark" then
+                    local sprite_index = pseudorandom('glopmother_sprite',0,1)
+                    if sprite_index ~= card.ability.extra.sprite_index then
+                        card.children.floating_sprite:set_sprite_pos({x = 3 + sprite_index, y = 3})
+                        card.ability.extra.sprite_index = sprite_index
+                    end
+                end
                 card:juice_up()
                 play_sound('tarot1')
                 delay(0.5)
