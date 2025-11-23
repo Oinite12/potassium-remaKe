@@ -148,7 +148,7 @@ end
 -- CREDITS
 ----------
 
-local contrib_credits = {
+local og_contrib_credits = {
 	{
 		'firz',
 		'zedruu_the_goat',
@@ -180,6 +180,18 @@ local contrib_credits = {
 	}
 }
 
+local contrib_credits = {
+	{
+		"Lil Mr. Slipstream"
+	},
+	{
+		"-"
+	},
+	{
+		"New sprites"
+	}
+}
+
 local function prepare_credits(texts, align, text_scale)
 	local nodes = {}
 	for _, text in ipairs(texts) do
@@ -187,7 +199,7 @@ local function prepare_credits(texts, align, text_scale)
 			{n=G.UIT.T, config={text = text, scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}}
 		}})
 	end
-	return {n=G.UIT.C, config={align = "tl", padding = 0.15, minw = 2.5}, nodes=nodes}
+	return {n=G.UIT.C, config={align = "tl", padding = 0.10}, nodes=nodes}
 end
 
 local function prepare_header(texts, text_scale)
@@ -213,13 +225,27 @@ end
 local function banana_credits()
     local text_scale = 0.8
     return {n=G.UIT.ROOT, config={align = "cm", padding = 0.2, colour = G.C.BLACK, r = 0.1, emboss = 0.05, minh = 6, minw = 6}, nodes={
+
+		-- REMAKE CREDITS
 		{n=G.UIT.C, config={align = "cm", padding = 0.05}, nodes = {
 			prepare_header({"Remake credits"}, text_scale),
 			prepare_subheader({
 				"Lead Developer: Oinite",
 				"Lead Designer: cassknows",
 			}, text_scale),
+			{n=G.UIT.R, config={align = "cm", padding = 0.1,outline_colour = G.C.JOKER_GREY, r = 0.1, outline = 1}, nodes={
+				{n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+					{n=G.UIT.T, config={text = "Additional contributions", scale = text_scale*0.6, colour = G.C.BANAN1, shadow = true}},
+				}},
+				{n=G.UIT.R, config={align = "tm", padding = 0}, nodes={
+					prepare_credits(contrib_credits[1], 'cr', text_scale),
+					prepare_credits(contrib_credits[2], 'cm', text_scale),
+					prepare_credits(contrib_credits[3], 'cl', text_scale),
+				}},
+			}},
 		}},
+
+		-- ORIGINAL CREDITS
 		{n=G.UIT.C, config={align = "cm", padding = 0.05}, nodes = {
 			prepare_header({"Original mod credits"}, text_scale),
 			prepare_subheader({"Lead Developer: MathIsFun_"}, text_scale),
@@ -228,8 +254,8 @@ local function banana_credits()
 					{n=G.UIT.T, config={text = "Contributors", scale = text_scale*0.6, colour = G.C.BANAN1, shadow = true}},
 				}},
 				{n=G.UIT.R, config={align = "tm", padding = 0}, nodes={
-					prepare_credits(contrib_credits[1], 'cr', text_scale),
-					prepare_credits(contrib_credits[2], 'cl', text_scale),
+					prepare_credits(og_contrib_credits[1], 'cr', text_scale),
+					prepare_credits(og_contrib_credits[2], 'cl', text_scale),
 				}},
 			}}
 		}}
