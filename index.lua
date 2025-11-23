@@ -26,7 +26,7 @@ Glop_f = Glop_f or {}
 ---@param func function
 ---@return nil
 Glop_f.add_simple_event = function(trigger, delay, func)
-	-- This is here in Oblivion.lua so it's loaded before everything, which uses this function
+	-- This is here in index.lua so it's loaded before everything, which uses this function
 	G.E_MANAGER:add_event(Event {
 		trigger = trigger,
 		delay = delay,

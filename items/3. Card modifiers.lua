@@ -21,32 +21,35 @@ SMODS.Edition {
         ) then
             local calc_keys = Potassium.calc_keys
             local increased = false
-            local glop = 0
+            local glop  = 0
             local xglop = 1
             local eglop = 1
 
-            for _,something in pairs(context.other_ret) do
-                for return_key, value in pairs(something) do
-                    if calc_keys.additive[return_key] then
-                        -- "Normalize" value to significand (scientific notation)
-                        local reduced_value = value/10^(math.floor(math.log(tonumber(value) --[[@as number]], 10))+1)
-                        glop = glop + reduced_value
+            for _,ret_table in pairs(context.other_ret) do
+                for calc_key, value in pairs(ret_table) do
+
+                    if calc_keys.additive[calc_key] then
+                        -- "Normalize" value to normalized significand
+                        local value_magnitude = math.floor(math.log(value, 10))
+                        local significand = value/10^(value_magnitude + 1)
+                        glop = glop + significand
                         increased = true
-                    elseif calc_keys.multiplicative[return_key] then
+                    elseif calc_keys.multiplicative[calc_key] then
                         glop = glop + value
                         increased = true
-                    elseif calc_keys.exponential[return_key] then
+                    elseif calc_keys.exponential[calc_key] then
                         xglop = xglop*value
                         increased = true
-                    elseif calc_keys.hyperoperative[return_key] then
+                    elseif calc_keys.hyperoperative[calc_key] then
                         eglop = eglop*value
                         increased = true
                     end
+
                 end
             end
 
             if increased then return {
-                glop = glop,
+                glop  = glop,
                 xglop = xglop,
                 eglop = eglop
             } end
@@ -67,6 +70,7 @@ SMODS.Sticker {
         if card.ability.set ~= "Joker" then
             key = "kali_stickernana_playing_card"
         end
+
         return {
             key = key,
             vars = {
