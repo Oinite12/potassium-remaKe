@@ -1,4 +1,11 @@
-SMODS.Shader{
-    key = "glop",
-    path = "glop.fs"
+local shaders = {
+	"glop",
+    "vital"
 }
+
+for _, key in ipairs(shaders) do
+	SMODS.Shader{
+		key = key,
+		path = key .. ".fs"
+	}
+end

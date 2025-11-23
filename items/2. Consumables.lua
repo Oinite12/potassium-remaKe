@@ -307,8 +307,8 @@ SMODS.Consumable {
 
     atlas = "consumables",
     pos = {x = 0, y = 2},
-    soul_pos = {x = 1, y = 2,
-        extra = {x = 2, y = 2}
+    soul_pos = {x = 2, y = 2,
+        extra = {x = 1, y = 2}
     },
 
     hidden = true,
@@ -323,6 +323,12 @@ SMODS.Consumable {
             card:juice_up(0.3, 0.5)
         end)
         delay(0.6)
+    end,
+
+    draw = function(self, card, layer)
+        if (layer == 'card' or layer == 'both') and card.sprite_facing == 'front' then
+            card.children.center:draw_shader('kali_vital', nil, card.ARGS.send_to_shader)
+        end
     end
 }
 
