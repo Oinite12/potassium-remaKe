@@ -10,6 +10,7 @@ if not is_number then
 end
 
 Potassium = Potassium or {}
+Potassium.mod = SMODS.current_mod
 Potassium.mod_path = tostring(SMODS.current_mod.path)
 Glop_f = Glop_f or {}
 
@@ -63,6 +64,15 @@ Glop_f.load_directory("items")
 Glop_f.load_directory("cross-mod", function (file_name)
 	return (SMODS.Mods[file_name:gsub('%.lua$', '')] or {}).can_load
 end)
+
+-------------
+-- MOD OBJECT
+-------------
+Potassium.mod.reset_game_globals = function (run_start)
+	if run_start then
+		G.GAME.kali_glop_increase_from_calc_keys = 0.01
+	end
+end
 
 -------------
 -- EVOLUTIONS

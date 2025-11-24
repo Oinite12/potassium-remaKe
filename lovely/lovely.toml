@@ -42,7 +42,7 @@ if effect[key] then
 position = "after"
 payload = '''
 if Potassium.calc_keys.all[key] then
-    SMODS.Scoring_Parameters.kali_glop:modify(0.01)
+    SMODS.Scoring_Parameters.kali_glop:modify(G.GAME.kali_glop_increase_from_calc_keys)
 end
 '''
 match_indent = true
