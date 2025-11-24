@@ -1,7 +1,3 @@
---[[
-- Flower Pot (Virgin Bouquet)
-]]
-
 ---@param card Card
 ---@param target string
 ---@param scalar string

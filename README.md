@@ -1,10 +1,34 @@
-# potassium-remaKe
-A remake of Potassium, a Balatro mod that has all the bananas and glop you could ever need.
+# RE:Potassium
+A remake of Potassium, a Balatro mod that has all the bananas and glop you could ever need! Currently the mod adds:
 
-## Motive
-Potassium was released on April Fool's Day 2025; a lot of breaking changes have since been implemented in Steamodded that prevent the original mod from running at all. It also features several overriding changes that makes it less appealing to play with other mods. This remake intends to re-implement Potassium features with modern features, while also making it more friendly to use with other mods. Some content may also be subject to reworks, while other content will not be brought into this remake; this is to improve balance and cross-mod interactions.
+- Glop, a scoring parameter that multiplies with Chips and Mult
+- 16 Jokers
+- A new Poker Hand
+- 2 Planet Cards, 4 Spectral Cards, and 1 Tag
+- An Edition and Sticker
+- A stake and two special blinds
+- Like a secret or two
+
+and more to come!
+
+## Motive for remaking
+Potassium was released on April Fool's Day 2025; since then, a lot of breaking changes have been implemented in Steamodded that prevent the original mod from running at all. The original Potassium mod also featured several overriding changes that makes the mod less appealing to play with other mods.
+
+This remake re-implements various Potassium features with modern Steamodded features and improved code. Modularity is also more pronounced so other mods can interface this mod and implement cross-mod content and behaviors easily. Additionally, various content from the original Potassium are subject to reworks, while other content will not be re-implemented; this is to improve balance and cross-mod interactions.
+
+The intent is to ultimately make it easier to develop this mod and add new content that expands on the premise of bananas and glop.
 
 ## Technical documentation
+### Contexts
+This context occurs when a card goes extinct. It is sent by Gros Michel, Cavendish, Blue Java, Potassium in a Bottle, Banana Bean, Glopendish, and anything with the Banana sticker.
+```lua
+if context.kali_extinct then
+{
+    kali_extinct = true,
+    other_card = card_key
+}
+```
+
 ### Evolving Jokers
 Jokers that can evolve with Ambrosia (Banana-themed evolutions) can be implemented by adding a key-value pair to the table `Potassium.banana_evolutions`, where the key is the key of the initial Joker, and the value is the key of the evolved Joker.
 
@@ -64,12 +88,19 @@ SMODS.Joker {
 }
 ```
 
-### Contexts
-This context occurs when a card goes extinct. It is sent by Gros Michel, Cavendish, Blue Java, Potassium in a Bottle, Banana Bean, Glopendish, and anything with the Banana sticker.
-```lua
-if context.kali_extinct then
-{
-    kali_extinct = true,
-    other_card = card_key
-}
-```
+### Hand level up animation fixes
+This mod makes several fixes to hand leveling animations when other scoring calculatons (such as Glop) are used. These fixes are also found in [Steamodded PR #1026](//github.com/Steamodded/smods/pull/1026) and will be removed from this mod when/if the pull request is merged.
+
+To make these fixes:
+- The following functions are added: (*func/funcs.lua*)
+  - `Glop_f.current_upgradeable_scoring_parameters`
+  - `Glop_f.start_level_up_hand_animation`
+  - `Glop_f.level_up_hand_animation`
+  - `Glop_f.end_level_up_hand_animation`
+- Hooks to the following functions are added: (*func/hooks.lua*)
+  - `level_up_hand` (OVERRIDE)
+  - `Card:use_consumeable`
+- The following vanilla objects have their ownership taken: (*func/ownership.lua*)
+  - Orbital Tag, Tag
+  - Black Hole, Spectral Card
+  - Burnt Joker, Joker
