@@ -12,3 +12,7 @@ Potassium.sfarkmodkeys = {
     ['xsfark'] = 'mult',
     ['esfark'] = 'expo',
 }
+
+MyDreamJournal = MyDreamJournal or {}
+MyDreamJournal.glopmodkeys = Potassium.glopmodkeys
+MyDreamJournal.sfarkmodkeys = Potassium.sfarkmodkeys
