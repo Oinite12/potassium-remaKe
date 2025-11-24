@@ -1,0 +1,60 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# lovely/cross-mod.toml
+# Changes for Entropy
+
+# ----
+
+# In Entropy:
+# function CardArea:parse_highlighted
+# Set default scoring calculation to kali_glop
+[[patches]]
+[patches.pattern]
+target = '=[SMODS entr "lib/hooks.lua"]'
+pattern = '''
+if not G.GAME.old_operator then G.GAME.old_operator = G.GAME.current_scoring_calculation_key or "multiply" end
+'''
+position = "at"
+payload = '''
+-- The following line overriden by RE:Potassium --
+if not G.GAME.old_operator then G.GAME.old_operator = G.GAME.current_scoring_calculation_key or "kali_glop" end
+-- END RE:POTASSIUM PATCH --
+'''
+match_indent = true
+
+# In Entropy:
+# function CardArea:parse_highlighted
+# Set default scoring calculation to kali_glop
+[[patches]]
+[patches.pattern]
+target = '=[SMODS entr "lib/hooks.lua"]'
+pattern = '''
+SMODS.set_scoring_calculation("multiply")
+'''
+position = "at"
+payload = '''
+-- The following line overriden by RE:Potassium --
+SMODS.set_scoring_calculation("kali_glop")
+-- END RE:POTASSIUM PATCH --
+'''
+match_indent = true
+
+# In Entropy:
+# function j_entr_atomikos:add_to_deck
+# High Card operator changed to kali_expoglop
+[[patches]]
+[patches.pattern]
+target = '=[SMODS entr "compat/cryptid/entropic_jokers.lua"]'
+pattern = '''
+G.GAME.hands["High Card"].operator = "exponent"
+'''
+position = "at"
+payload = '''
+-- The following line overriden by RE:Potassium --
+G.GAME.hands["High Card"].operator = "kali_expoglop"
+-- END RE:POTASSIUM PATCH --
+'''
+match_indent = true

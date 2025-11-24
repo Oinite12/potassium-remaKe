@@ -1,3 +1,6 @@
+-- CROSS-MOD for Malverk
+-- Content includes: A texture pack that reimplements April Fool's textures
+
 -----------------
 -- ALT TEXTURE
 -- Vanilla Jokers

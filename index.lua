@@ -42,18 +42,18 @@ function Glop_f.load_directory(folder_name, condition_function)
 	local mod_path = Potassium.mod_path
 	local files = NFS.getDirectoryItems(mod_path .. folder_name)
 
-	for _,file_name in ipairs(files) do
+	for _,file_name in ipairs(files) do if file_name:match("%.lua$") then
 		local condition_is_met = true
 		if condition_function then condition_is_met = condition_function(file_name) end
 
-		if file_name:match(".lua$") and condition_is_met then
+		if condition_is_met then
 			print("[POTASSIUM] Loading file " .. file_name)
-			local file_format = ("%s/%s")
+			local file_format = "%s/%s"
 			local file_func, err = SMODS.load_file(file_format:format(folder_name, file_name))
-			if err then error(err) end
+			if err then error(err) end --Steamodded actually does a really good job of displaying this info! So we don't need to do anything else.
 			if file_func then file_func() end
 		end
-	end
+	end end
 end
 
 Glop_f.load_directory("load_assets")
@@ -61,7 +61,7 @@ Glop_f.load_directory("func")
 Glop_f.load_directory("items")
 -- Cross-mod files (named with mod ID) only loaded if mod is loaded
 Glop_f.load_directory("cross-mod", function (file_name)
-	return (SMODS.Mods[file_name] or {}).can_load
+	return (SMODS.Mods[file_name:gsub('%.lua$', '')] or {}).can_load
 end)
 
 -------------
