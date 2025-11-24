@@ -771,7 +771,9 @@ SMODS.Joker {
         ) then
             SMODS.set_scoring_calculation('kali_sfark')
         end
-        card.children.floating_sprite:set_sprite_pos({x = 3 + card.ability.extra.sprite_index, y = 3})
+        local sprite_index = card.ability.extra.sprite_index
+        card.children.center:set_sprite_pos({x = 2 + sprite_index*2, y = 3})
+        card.children.floating_sprite:set_sprite_pos({x = 3 + sprite_index*2, y = 3})
     end,
     remove_from_deck = function (self, card, from_debuff)
         if #SMODS.find_card('j_kali_glopmother') == 0 then
@@ -812,7 +814,8 @@ SMODS.Joker {
                 if G.GAME.current_scoring_calculation.key == "kali_sfark" then
                     local sprite_index = pseudorandom('glopmother_sprite',0,1)
                     if sprite_index ~= card.ability.extra.sprite_index then
-                        card.children.floating_sprite:set_sprite_pos({x = 3 + sprite_index, y = 3})
+                        card.children.center:set_sprite_pos({x = 2 + sprite_index*2, y = 3})
+                        card.children.floating_sprite:set_sprite_pos({x = 3 + sprite_index*2, y = 3})
                         card.ability.extra.sprite_index = sprite_index
                     end
                 end
