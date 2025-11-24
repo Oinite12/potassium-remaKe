@@ -149,7 +149,7 @@ SMODS.Scoring_Parameter {
                     vars = {number_format(amount)}
                 },
                 colour = self.colour,
-                sound = 'kali_glop_edition'
+                sound = 'kali_sfark'
             })
             return true
         end
@@ -163,7 +163,7 @@ SMODS.Scoring_Parameter {
                     vars = {'X'..number_format(amount)}
                 },
                 colour = self.colour,
-                sound = 'kali_glop_edition'
+                sound = 'kali_xsfark'
             })
             return true
         end
@@ -177,7 +177,7 @@ SMODS.Scoring_Parameter {
                     vars = {'^'..number_format(amount)}
                 },
                 colour = self.colour,
-                sound = 'kali_glop_edition'
+                sound = 'kali_expsfark'
             })
             return true
         end

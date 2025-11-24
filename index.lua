@@ -182,13 +182,16 @@ local og_contrib_credits = {
 
 local contrib_credits = {
 	{
-		"Lil Mr. Slipstream"
+		"Lil Mr. Slipstream",
+		"HexaCryonic",
 	},
 	{
-		"-"
+		"-",
+		"-",
 	},
 	{
-		"New sprites"
+		"Sprites",
+		"Sound effects",
 	}
 }
 

@@ -1,6 +1,9 @@
 local soundbytes = {
 	"glop",
-    "glop_edition"
+    "glop_edition",
+	"sfark",
+	"xsfark",
+	"expsfark",
 }
 
 for _, key in ipairs(soundbytes) do
