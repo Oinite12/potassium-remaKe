@@ -1,5 +1,5 @@
 -- CROSS-MOD for My Dream Journal
--- Content includes: N/A
+-- Content includes: Jan Nasa (A joker)
 
 Potassium.glopmodkeys = {
     ['glop'] = 'add',
