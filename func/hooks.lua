@@ -161,14 +161,14 @@ end
 ---- GAME OBJECT ----
 ---------------------
 
--- Hook to set profile permaglop, if not already set
+-- Hook to set profile metaglop, if not already set
 local game_initgameobj_hook = Game.init_game_object
 function Game:init_game_object()
     local ret = game_initgameobj_hook(self)
-    G.PROFILES[G.SETTINGS.profile].permaglop = G.PROFILES[G.SETTINGS.profile].permaglop or 0
+    G.PROFILES[G.SETTINGS.profile].metaglop = G.PROFILES[G.SETTINGS.profile].metaglop or 0
 
-    local permaglop = G.PROFILES[G.SETTINGS.profile].permaglop
-    SMODS.Scoring_Parameters.kali_glop.default_value = permaglop + 1
+    local metaglop = G.PROFILES[G.SETTINGS.profile].metaglop
+    SMODS.Scoring_Parameters.kali_glop.default_value = metaglop + 1
 
     return ret
 end
@@ -177,17 +177,17 @@ end
 local game_startrun_hook = Game.start_run
 function Game:start_run(...)
     game_startrun_hook(self, ...)
-    local permaglop = G.PROFILES[G.SETTINGS.profile].permaglop
-    SMODS.Scoring_Parameters.kali_glop.default_value = permaglop + 1
+    local metaglop = G.PROFILES[G.SETTINGS.profile].metaglop
+    SMODS.Scoring_Parameters.kali_glop.default_value = metaglop + 1
     SMODS.set_scoring_calculation('kali_glop')
 
-    if not G.GAME.set_permaglop then
+    if not G.GAME.set_metaglop then
         for _,hand_info in pairs(G.GAME.hands) do
-            hand_info.kali_extra_glop = Glop_f.get_permaglop()
+            hand_info.kali_extra_glop = Glop_f.get_metaglop()
             SMODS.Scoring_Parameters.kali_glop:level_up_hand(0, hand_info)
-            G.GAME.set_permaglop = true
+            G.GAME.set_metaglop = true
         end
-        G.GAME.set_permaglop = true
+        G.GAME.set_metaglop = true
     end
 
     Glop_f.add_simple_event('after', 1, function ()

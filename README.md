@@ -68,10 +68,10 @@ Banana blinds are boss blinds that only appear on ante 12 and have their own spe
 
 A flag can be added to blinds in a similar manner to showdown bosses that will mark them as banana blinds. To do so, add the following key-value pair to your SMODS.Blind: `boss = {banana = true}`.
 
-### Regarding permanent glop
-This remake of Potassium does not feature permanent glop via Glopway (as its metaprogression nature was largely a joke-y feature). Regardless, if you wish to use the mechanic for whatever reason, permanent glop can be increased per save via the function `Glop_f.increase_permaglop(number)`; all hands are updated in the current and future runs accordingly.
+### Regarding permanent glop (Metaglop)
+This remake of Potassium does not feature permanent glop (called "metaglop" in the remake) via Glopway (as its metaprogression nature was largely a joke-y feature). Regardless, if you wish to use the mechanic for whatever reason, permanent glop can be increased per save via the function `Glop_f.increase_metaglop(number)`; all hands are updated in the current and future runs accordingly.
 
-Permaglop is saved in the profile parameter `G.PROFILES[G.SETTINGS.profile].permaglop`, but the shorthand `Glop_f.get_permaglop()` can be used to retrive that data.
+Metaglop is saved in the profile parameter `G.PROFILES[G.SETTINGS.profile].metaglop`, but the shorthand `Glop_f.get_metaglop()` can be used to retrive that data.
 
 ### Three-layer cards
 This mod adds three-layer cards that have the same syntax (and system) as Cryptid's three-layer cards:

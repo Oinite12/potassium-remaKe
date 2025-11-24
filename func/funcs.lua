@@ -1,25 +1,25 @@
 -- These commonly called functions are used across the mod
 
--- 1. PERMAGLOP
+-- 1. METAGLOP
 -- 2. LEVEL UP HAND ANIMATION
 -- 3. MISCELLANEOUS
 
 
 
--------------------
----- PERMAGLOP ----
--------------------
+------------------
+---- METAGLOP ----
+------------------
 
--- Increase permaglop on the current save file.
+-- Increase metaglop on the current save file.
 ---@param amount number
 ---@return nil
-Glop_f.increase_permaglop = function(amount)
-    G.PROFILES[G.SETTINGS.profile].permaglop = (G.PROFILES[G.SETTINGS.profile].permaglop or 0) + amount
+Glop_f.increase_metaglop = function(amount)
+    G.PROFILES[G.SETTINGS.profile].metaglop = (G.PROFILES[G.SETTINGS.profile].metaglop or 0) + amount
 end
 
--- Get the permaglop of the current save file.
+-- Get the metaglop of the current save file.
 ---@return number
-Glop_f.get_permaglop = function() return G.PROFILES[G.SETTINGS.profile].permaglop or 0 end
+Glop_f.get_metaglop = function() return G.PROFILES[G.SETTINGS.profile].metaglop or 0 end
 
 
 
