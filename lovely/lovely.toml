@@ -30,6 +30,7 @@ end
 '''
 match_indent = true
 
+# In Steamodded:
 # function SMODS.calculate_effect
 # Increase Glop per chip/mult/glop/etc increase
 [[patches]]
