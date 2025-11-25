@@ -40,8 +40,8 @@ SMODS.PokerHandPart {
 -----------------
 SMODS.PokerHand {
     key = "virgin_bouquet",
-    chips   = 20, mult   = 4, kali_glop   = 2,
-    l_chips = 15, l_mult = 1, l_kali_glop = 0.2,
+    chips   = 20, mult   = 4,
+    l_chips = 15, l_mult = 1,
 
     visible = false,
     example = {
@@ -69,6 +69,7 @@ SMODS.Scoring_Parameter {
     -- glop values for all hands added in func/post-load.lua
     hands = {
         -- Note that Potassium has "x_kali_glop", parameter for holding non-level Glop
+        kali_virgin_bouquet = {kali_glop = 2, s_kali_glop = 2, l_kali_glop = 0.2}
     },
     level_up_hand = function (self, amount, hand)
         local new_kali_glop = hand.s_kali_glop + hand.l_kali_glop*(hand.level - 1) + hand.kali_extra_glop
