@@ -115,7 +115,7 @@ if v.boss.showdown then
 '''
 position = "after"
 payload = '''
-elseif v.boss.banana then 
+elseif v.boss and v.boss.banana then 
     ease_background_colour{new_colour = G.C.BANAN2, special_colour = G.C.BANAN1, tertiary_colour = darken(G.C.BLACK, 0.4), contrast = 3}
     return
 '''
