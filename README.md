@@ -93,7 +93,7 @@ This mod makes several fixes to hand leveling animations when other scoring calc
 
 To make these fixes:
 - The following functions are added: (*func/funcs.lua*)
-  - `Glop_f.current_upgradeable_scoring_parameters`
+  - `Glop_f.scoring_parameter_is_upgradeable`
   - `Glop_f.start_level_up_hand_animation`
   - `Glop_f.level_up_hand_animation`
   - `Glop_f.end_level_up_hand_animation`
@@ -104,3 +104,6 @@ To make these fixes:
   - Orbital Tag, Tag
   - Black Hole, Spectral Card
   - Burnt Joker, Joker
+- The following functions are patched: (*lovely/lovely.toml*)
+  - `update_hand_text`
+  - `SMODS.refresh_score_UI_list`

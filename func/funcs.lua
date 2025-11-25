@@ -27,87 +27,103 @@ Glop_f.get_metaglop = function() return G.PROFILES[G.SETTINGS.profile].metaglop 
 ---- LEVEL UP HAND ANIMATION ----
 ---------------------------------
 
--- Fetch the scoring parameters for the current scoring calculation.\
--- If `hand` is specified, only scoring parameters with defined level hand upgrade\
--- values will be returned.
----@param hand? string
----@return string[]
-Glop_f.current_upgradeable_scoring_parameters = function (hand)
-    local current_scoring_params = {}
-    for _, param_name in ipairs(G.GAME.current_scoring_calculation.parameters) do
-        if hand and G.GAME.hands[hand] then
-            if G.GAME.hands[hand][param_name] then
-                table.insert(current_scoring_params, param_name)
-            end
-        else
-            table.insert(current_scoring_params, param_name)
+---Check if a scoring parameter can be upgraded in a hand.
+---@param param_key string
+---@param hand_key? string If not given, function returns true.
+---@return boolean
+function Glop_f.scoring_parameter_is_upgradeable(param_key, hand_key)
+    -- This function is necessary to prevent unnecessary inclusions
+    -- of unused scoring parameters into the update_hand_text `vals` table
+    -- Might see use outside SMODS code?
+    if hand_key and G.GAME.hands[hand_key] then
+        if G.GAME.hands[hand_key][param_key] then
+            return true
         end
+    else
+        return true
     end
-    return current_scoring_params
+    return false
 end
 
--- Prepares the level up hand animation by setting parameter, hand, and level text.
----@param args table<string, any>
+---Begins the hand level-up animation by setting initial text for scoring parameters and the hand level.
+---@param args table|{hand: string?, hand_text: string?, parameter_text: table<string, string>?, all_parameter_text: string?, level_text: string}
 ---@return nil
-Glop_f.start_level_up_hand_animation = function (args)
+function Glop_f.start_level_up_hand_animation(args)
     args = args or {}
     local hand = args.hand
     local hand_text = args.hand_text or hand or ''
     local parameter_text = args.parameter_text or {}
     local all_parameter_text = args.all_parameter_text or ''
     local level_text = args.level_text or (hand and G.GAME.hands[hand].level) or '?'
-    local scoring_params = Glop_f.current_upgradeable_scoring_parameters()
 
     local init_hand_text = {handname = hand_text, level = level_text}
-    for _,param_name in ipairs(scoring_params --[[@as table]]) do
-        init_hand_text[param_name] = parameter_text[param_name] or (hand and G.GAME.hands[hand][param_name]) or all_parameter_text
+    for _,param_key in ipairs(G.GAME.current_scoring_calculation.parameters) do
+        if Glop_f.scoring_parameter_is_upgradeable(param_key, hand) then
+            init_hand_text[param_key] = parameter_text[param_key] or (hand and G.GAME.hands[hand][param_key]) or all_parameter_text
+        else
+            init_hand_text[param_key] = SMODS.Scoring_Parameters[param_key].default_value
+        end
     end
     update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, init_hand_text)
 end
 
--- Plays the level up hand animation by flashing parameter text, and updating level text.
----@param args table<string, any>
+---Update the text of each scoring parameter one at a time\
+---(in the order of `G.GAME.current_scoring_calculation.parameters`),\
+---then update the text of the displayed hand level.
+---@param args table|{hand: string?, card: Card?, parameter_status_text: table<string, string>?, all_parameter_status_text: string?, level_text: string}
 ---@return nil
-Glop_f.level_up_hand_animation = function (args)
+function Glop_f.level_up_hand_animation(args)
     args = args or {}
     local hand = args.hand
     local card = args.card
     local parameter_status_text = args.parameter_status_text or {}
     local all_parameter_status_text = args.all_parameter_status_text or ''
     local level_text = args.level_text or (hand and G.GAME.hands[hand].level) or ''
-    local scoring_params = Glop_f.current_upgradeable_scoring_parameters()
 
     -- Animations play in order of the `parameters` parameter of the scoring calculation
-    for i,param_name in ipairs(scoring_params --[[@as table]]) do
-        local current_param_text = parameter_status_text[param_name] or (hand and G.GAME.hands[hand][param_name]) or all_parameter_status_text
-        Glop_f.add_simple_event('after', i == 1 and 0.2 or 0.9, function ()
-            play_sound('tarot1')
-            if card then card:juice_up(0.8, 0.5) end
-            G.TAROT_INTERRUPT_PULSE = true
-        end)
-        update_hand_text({delay = 0}, {[param_name] = current_param_text, StatusText = true})
+    for i,param_key in ipairs(G.GAME.current_scoring_calculation.parameters) do
+        if Glop_f.scoring_parameter_is_upgradeable(param_key, hand) then
+            local current_param_text = parameter_status_text[param_key] or (hand and G.GAME.hands[hand][param_key]) or all_parameter_status_text
+            G.E_MANAGER:add_event(Event {
+                trigger = 'after',
+                delay = i == 1 and 0.2 or 0.9,
+                func = function ()
+                    play_sound('tarot1')
+                    if card then card:juice_up(0.8, 0.5) end
+                    G.TAROT_INTERRUPT_PULSE = true
+                    return true
+                end
+            })
+            update_hand_text({delay = 0}, {[param_key] = current_param_text, StatusText = true})
+        end
     end
 
-    Glop_f.add_simple_event('after', 0.9, function ()
-        play_sound('tarot1')
-        if card then card:juice_up(0.8, 0.5) end
-        G.TAROT_INTERRUPT_PULSE = nil
-    end)
+    -- Finally, 'level' text is animated
+    G.E_MANAGER:add_event(Event {
+        trigger = 'after',
+        delay = 0.9,
+        func = function ()
+            play_sound('tarot1')
+            if card then card:juice_up(0.8, 0.5) end
+            G.TAROT_INTERRUPT_PULSE = nil
+            return true
+        end
+    })
     update_hand_text({sound = 'button', volume = 0.7, pitch = 0.9, delay = 0}, {level=level_text})
     delay(1.3)
 end
 
--- Finishes the level up hand animation by clearing hand and level text,\
--- and reseting parameter text to default values.
----@param args table<string, any>
+---Ends the hand level-up animation by re-setting default values as displayed text for scoring parameters, and hiding the hand level.
+---@param args table
 ---@return nil
-Glop_f.end_level_up_hand_animation = function (args)
+function Glop_f.end_level_up_hand_animation(args)
     args = args or {}
-    local scoring_params = Glop_f.current_upgradeable_scoring_parameters()
 
     local post_hand_text = {handname = '', level = ''}
-    for _,param_name in ipairs(scoring_params --[[@as table]]) do
-        post_hand_text[param_name] = SMODS.Scoring_Parameters[param_name].default_value
+    for _,param_key in ipairs(G.GAME.current_scoring_calculation.parameters) do
+        if Glop_f.scoring_parameter_is_upgradeable(param_key, hand) then
+            post_hand_text[param_key] = SMODS.Scoring_Parameters[param_key].default_value
+        end
     end
     update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, post_hand_text)
 end
