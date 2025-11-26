@@ -8,7 +8,7 @@
 	"main_file": "index.lua",
 	"priority": 0,
 	"badge_colour": "F5D953",
-	"version": "0.1.0",
+	"version": "1.0.2",
 	"dependencies": [
 		"Steamodded (>=1.0.0~BETA-0827)"
 	]
