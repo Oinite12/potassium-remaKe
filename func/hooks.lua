@@ -23,7 +23,7 @@ function level_up_hand(card, hand, instant, amount)
     end
 
     if not instant then
-        Glop_f.level_up_hand_animation{hand = hand}
+        Glop_f.level_up_hand_animation{hand = hand, card = card}
     end
 
     G.E_MANAGER:add_event(Event({
