@@ -189,9 +189,4 @@ function Game:start_run(...)
         end
         G.GAME.set_metaglop = true
     end
-
-    Glop_f.add_simple_event('after', 1, function ()
-        G.hand_text_area.mult = G.HUD:get_UIE_by_ID('hand_mult_area')
-        G.hand_text_area.chips = G.HUD:get_UIE_by_ID('hand_chips_area')
-    end)
 end

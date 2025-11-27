@@ -47,35 +47,6 @@ end
 '''
 match_indent = true
 
-# function update_hand_text
-# Change targetted UIE ID to correct target
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = '''
-G.hand_text_area[name] = G.hand_text_area[name] or G.HUD:get_UIE_by_ID('hand_'..name) or nil
-'''
-position = "at"
-payload = '''
-G.hand_text_area[name] = G.hand_text_area[name] or G.HUD:get_UIE_by_ID('hand_'..name..'_area')
-'''
-match_indent = true
-
-# In Steamodded:
-# function SMODS.refresh_score_UI_list
-# Change targetted UIE ID to correct target
-[[patches]]
-[patches.pattern]
-target = '''=[SMODS _ "src/utils.lua"]'''
-pattern = '''
-G.hand_text_area[name] = G.HUD:get_UIE_by_ID('hand_'..name)
-'''
-position = "at"
-payload = '''
-G.hand_text_area[name] = G.HUD:get_UIE_by_ID('hand_'..name..'_area')
-'''
-match_indent = true
-
 # -- CARD GLOP --
 
 # function Card:set_ability

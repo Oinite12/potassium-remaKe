@@ -201,7 +201,7 @@ SMODS.Scoring_Calculation {
         local scale = 0.3
         return
 		{n=G.UIT.R, config={align = "cm", minh = 1, padding = 0.1}, nodes={
-			{n=G.UIT.C, config={align = 'cm', id = 'hand_chips'}, nodes = {
+			{n=G.UIT.C, config={align = 'cm', id = 'hand_chips_container'}, nodes = {
 				SMODS.GUI.score_container({
 					type = 'chips',
 					text = 'chip_text',
@@ -212,7 +212,7 @@ SMODS.Scoring_Calculation {
 				})
 			}},
 			SMODS.GUI.operator(scale*0.75),
-			{n=G.UIT.C, config={align = 'cm', id = 'hand_mult'}, nodes = {
+			{n=G.UIT.C, config={align = 'cm', id = 'hand_mult_container'}, nodes = {
 				SMODS.GUI.score_container({
 					type = 'mult',
 					align = 'cm',
@@ -222,7 +222,7 @@ SMODS.Scoring_Calculation {
 				})
 			}},
 			SMODS.GUI.operator(scale*0.75),
-			{n=G.UIT.C, config={align = 'cm', id = 'hand_kali_glop'}, nodes = {
+			{n=G.UIT.C, config={align = 'cm', id = 'hand_kali_glop_container'}, nodes = {
 				SMODS.GUI.score_container({
 					type = 'kali_glop',
 					align = 'cl',
