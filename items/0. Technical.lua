@@ -44,6 +44,7 @@ SMODS.PokerHand {
     l_chips = 15, l_mult = 1,
 
     visible = false,
+    above_hand = "Three of a Kind",
     example = {
         {'S_Q', true },
         {'H_J', true },
