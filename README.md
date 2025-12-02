@@ -19,6 +19,9 @@ This remake re-implements various Potassium features with modern Steamodded feat
 The intent is to ultimately make it easier to develop this mod and add new content that expands on the premise of bananas and glop.
 
 ## Technical documentation
+> [!NOTE] DISCLAIMER!
+> Documentation will spoil afforementioned mod secrets. Read at your own discretion!
+
 ### Contexts
 This context occurs when a card goes extinct. It is sent by Gros Michel, Cavendish, Blue Java, Potassium in a Bottle, Banana Bean, Glopendish, and anything with the Banana sticker.
 ```lua
@@ -28,6 +31,53 @@ if context.kali_extinct then
     other_card = card_key
 }
 ```
+
+### All about Glop (and Sfark) values
+Much like Chips and Mult, Glop can be increased by adding a key-value pair to the calculate function's return table, like as follows:
+```lua
+calculate = function(self, card, context)
+  if (conditional) then
+    ...
+    return {glop = 2}
+  end
+end
+```
+The following calculation keys for glop are recognized by the mod:
+- `glop` - additive increase
+- `xglop` - multiplicative increase
+- `eglop` - exponential increase
+- `eq_glop` - set glop directly to value
+
+Sfark can be increased similarly and has a similar set of calculation keys to glop, however the scoring calculation needs to be set to Sfark for effects to occur.
+
+Furthermore, playing cards can hold permanent/bonus glop. To achieve this, change the value `card.ability.perma_glop` on a card. A Joker may achieve this on `context.individual` and by changing card to `context.other_card`. A sfark analogue does not exist yet (but feel free to suggest it if you need it).
+
+### More Glop/Sfark calculation keys
+By adding to the tables `Potassium.key_effects.kali_glop` and `Potassium.key_effects.kali_sfark`, one may very easily add more calculation keys that modify glop or sfark in an atypical manner.
+
+To do so, first make the global table `Potassium` existent*, then make the table `Potassium.key_effects` existent*, then finally make either `Potassium.key_effects.kali_glop` or `Potassium.key_effects.kali_sfark` existent*.
+<small>*For example, `Potassium = Potassium or {}`</small>
+
+In either table, add a key-value pair, with the key being the calculation key, and the value being a function of the following format:
+```lua
+{
+function (current --[[NUMBER]], amount --[[NUMBER]])
+  -- any additional code
+  return {
+    identity = NUMBER,
+    apply = NUMBER,
+    message_key = STRING, --[[optional; key in localization.misc.v_dictionary]]
+    message_text = STRING, --[[either variable for message_key, or just the text itself]]
+    sound = STRING --[[optional; key of sound]]
+  }
+end
+}
+```
+where `current` is the current value of Glop or Sfark, and `amount` is the value given in a calculate function's return table (i.e. `return {glop = 1}`).
+
+`apply` may require both `current` and `amount`; notationally it should describe what is occurring to `current`. For example, the `apply` for the calculation key `glop` is `current + amount`, which is saying that `amount` is being added to the `current` value. This format is primarily for readability purposes.
+
+`identity` refers to the identity element of the calculation key, or the exact value that, when attempted to be applied to the scoring parameter, results in effectively nothing happening. For example, `glop` has an identity of 0 (since adding 0 does nothing), but `xglop` has an identity of 1 (since multiplying by 1 does nothing)
 
 ### Evolving Jokers
 Jokers that can evolve with Ambrosia (Banana-themed evolutions) can be implemented by adding a key-value pair to the table `Potassium.banana_evolutions`, where the key is the key of the initial Joker, and the value is the key of the evolved Joker.
@@ -74,7 +124,7 @@ This remake of Potassium does not feature permanent glop (called "metaglop" in t
 Metaglop is saved in the profile parameter `G.PROFILES[G.SETTINGS.profile].metaglop`, but the shorthand `Glop_f.get_metaglop()` can be used to retrive that data.
 
 ### Three-layer cards
-This mod adds three-layer cards that have the same syntax (and system) as Cryptid's three-layer cards:
+If Cryptid is not installed, this mod will add Cryptid's three-layer card system:
 ```lua
 SMODS.Joker {
   key = "mu",
