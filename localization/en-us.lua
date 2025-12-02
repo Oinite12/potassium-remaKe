@@ -168,6 +168,15 @@ return {
                     "{C:glop}+#1#{} Glop when scored",
 				}
 			},
+
+			-- CROSS-MOD --
+			j_kali_whatsunn = {
+				name = "WhatSunn",
+				text = {
+					"{X:entr_eqmult,C:white}=#1# {} Glop",
+					"{C:gold}+#2# {}Ascension Power"
+				}
+			}
         },
 		Planet = {
 			c_kali_glopur = {

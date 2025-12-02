@@ -95,6 +95,84 @@ g_map["j_cavendish"]   = "j_kali_glopendish"
 g_map["j_diet_cola"]   = "j_kali_glop_cola"
 g_map["j_popcorn"]     = "j_kali_glop_corn"
 
+-----------------------------
+-- CALCULATION KEY DEFINITION
+-----------------------------
+Potassium.key_effects = Potassium.key_effects or {}
+Potassium.key_effects.kali_glop = Potassium.key_effects.kali_glop or {}
+Potassium.key_effects.kali_glop["glop"] = function (current, amount)
+	return {
+		identity = 0,
+		apply = current+amount,
+		message_key = amount > 0 and 'a_chips' or 'a_chips_minus',
+		message_text = number_format(amount),
+		sound = "kali_glop",
+	}
+end
+Potassium.key_effects.kali_glop["xglop"] = function (current, amount)
+	return {
+		identity = 1,
+		apply = current*amount,
+		message_key = amount > 0 and 'a_chips' or 'a_chips_minus',
+		message_text = 'X'..number_format(amount),
+		sound = "kali_glop",
+	}
+end
+Potassium.key_effects.kali_glop["eglop"] = function (current, amount)
+	return {
+		identity = 1,
+		apply = current^amount,
+		message_key = amount > 0 and 'a_chips' or 'a_chips_minus',
+		message_text = '^'..number_format(amount),
+		sound = "kali_glop_edition",
+	}
+end
+Potassium.key_effects.kali_glop["eq_glop"] = function (current, amount)
+	return {
+		identity = current,
+		apply = amount,
+		message_text = '='..number_format(amount),
+		sound = "kali_glop_edition",
+	}
+end
+
+Potassium.key_effects.kali_sfark = Potassium.key_effects.kali_sfark or {}
+Potassium.key_effects.kali_sfark["sfark"] = function (current, amount)
+	return {
+		identity = 0,
+		apply = current+amount,
+		message_key = amount > 0 and 'a_chips' or 'a_chips_minus',
+		message_text = number_format(amount),
+		sound = "kali_sfark"
+	}
+end
+Potassium.key_effects.kali_sfark["xsfark"] = function (current, amount)
+	return {
+		identity = 1,
+		apply = current*amount,
+		message_key = amount > 0 and 'a_chips' or 'a_chips_minus',
+		message_text = 'X'..number_format(amount),
+		sound = "kali_xsfark"
+	}
+end
+Potassium.key_effects.kali_sfark["esfark"] = function (current, amount)
+	return {
+		identity = 1,
+		apply = current^amount,
+		message_key = amount > 0 and 'a_chips' or 'a_chips_minus',
+		message_text = '^'..number_format(amount),
+		sound = "kali_expsfark"
+	}
+end
+Potassium.key_effects.kali_sfark["eq_sfark"] = function (current, amount)
+	return {
+		identity = current,
+		apply = amount,
+		message_text = '='..number_format(amount),
+		sound = "kali_xsfark",
+	}
+end
+
 -------------------------------
 -- CALCULAITON KEY ORGANIZATION
 -------------------------------

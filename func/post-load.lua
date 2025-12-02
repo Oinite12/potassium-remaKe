@@ -20,4 +20,28 @@ Glop_f.add_simple_event(nil, nil, function ()
             Potassium.glop_evolutions[center.key] = "j_kali_glopmother"
         end
     end
+
+    -- Add calculation keys for Glop, if not yet added
+    local glop_calc_keys_already_added = {}
+    for _,key in ipairs(SMODS.Scoring_Parameters["kali_glop"].calculation_keys) do
+        glop_calc_keys_already_added[key] = true
+    end
+
+    local glop_calc_keys = {}
+    for key in pairs(Potassium.key_effects.kali_glop) do if not glop_calc_keys_already_added[key] then
+        table.insert(glop_calc_keys, key)
+    end end
+    SMODS.Scoring_Parameters["kali_glop"].calculation_keys = glop_calc_keys
+
+    -- Add calculation keys for Sfark, if not yet added
+    local sfark_calc_keys_already_added = {}
+    for _,key in ipairs(SMODS.Scoring_Parameters["kali_sfark"].calculation_keys) do
+        sfark_calc_keys_already_added[key] = true
+    end
+
+    local sfark_calc_keys = {}
+    for key in pairs(Potassium.key_effects.kali_sfark) do  if not sfark_calc_keys_already_added[key] then
+        table.insert(sfark_calc_keys, key)
+    end end
+    SMODS.Scoring_Parameters["kali_sfark"].calculation_keys = sfark_calc_keys
 end)

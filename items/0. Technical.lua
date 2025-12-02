@@ -77,50 +77,27 @@ SMODS.Scoring_Parameter {
         hand.kali_glop = math.max(new_kali_glop, 0)
     end,
 
-    calculation_keys = {'glop', 'xglop', 'eglop'},
+    calculation_keys = {'glop', 'xglop', 'eglop', 'eq_glop'},
     calc_effect = function (self, effect, scored_card, key, amount, from_edition)
         if not amount then return end
 
         if effect.card and effect.card ~= scored_card then juice_card(effect.card) end
 
-        if key == 'glop' and amount ~= 0 then
-            self:modify(amount)
-            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
-                message = localize{
-                    type = 'variable',
-                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
-                    vars = {number_format(amount)}
-                },
-                colour = self.colour,
-                sound = 'kali_glop'
-            })
-            return true
-        end
+        -- Define what happens when a key is used, via Potassium.key_effects.kali_glop
+        local key_effects = Potassium.key_effects[self.key]
+        if key_effects and key_effects[key] then
+            local effect_values = key_effects[key](self.current, amount)
+            if amount == effect_values.identity then return end
 
-        if key == 'xglop' and amount ~= 1 then
-            self:modify(self.current*(amount - 1))
+            self:modify(effect_values.apply - self.current)
             card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
-                message = localize{
+                message = effect_values.message_key and localize{
                     type = 'variable',
-                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
-                    vars = {'X'..number_format(amount)}
-                },
+                    key = effect_values.message_key,
+                    vars = {effect_values.message_text}
+                } or effect_values.message_text,
                 colour = self.colour,
-                sound = 'kali_glop'
-            })
-            return true
-        end
-
-        if key == 'eglop' and amount ~= 1 then
-            self:modify(self.current^amount - self.current)
-            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
-                message = localize{
-                    type = 'variable',
-                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
-                    vars = {'^'..number_format(amount)}
-                },
-                colour = self.colour,
-                sound = 'kali_glop_edition'
+                sound = effect_values.sound
             })
             return true
         end
@@ -136,50 +113,27 @@ SMODS.Scoring_Parameter {
     default_value = 1,
     colour = G.C.SFARK,
 
-    calculation_keys = {'sfark', 'xsfark', 'esfark'},
+    calculation_keys = {'sfark', 'xsfark', 'esfark', 'eq_sfark'},
     calc_effect = function (self, effect, scored_card, key, amount, from_edition)
         if not amount then return end
 
         if effect.card and effect.card ~= scored_card then juice_card(effect.card) end
 
-        if key == 'sfark' and amount ~= 0 then
-            self:modify(amount)
-            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
-                message = localize{
-                    type = 'variable',
-                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
-                    vars = {number_format(amount)}
-                },
-                colour = self.colour,
-                sound = 'kali_sfark'
-            })
-            return true
-        end
+        -- Define what happens when a key is used, via Potassium.key_effects.kali_sfark
+        local key_effects = Potassium.key_effects[self.key]
+        if key_effects and key_effects[key] then
+            local effect_values = key_effects[key](self.current, amount)
+            if amount == effect_values.identity then return end
 
-        if key == 'xsfark' and amount ~= 1 then
-            self:modify(self.current*(amount - 1))
+            self:modify(effect_values.apply - self.current)
             card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
                 message = localize{
                     type = 'variable',
-                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
-                    vars = {'X'..number_format(amount)}
+                    key = effect_values.message_key,
+                    vars = {effect_values.message_text}
                 },
                 colour = self.colour,
-                sound = 'kali_xsfark'
-            })
-            return true
-        end
-
-        if key == 'esfark' and amount ~= 1 then
-            self:modify(self.current^amount - self.current)
-            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
-                message = localize{
-                    type = 'variable',
-                    key = amount > 0 and 'a_chips' or 'a_chips_minus',
-                    vars = {'^'..number_format(amount)}
-                },
-                colour = self.colour,
-                sound = 'kali_expsfark'
+                sound = effect_values.sound
             })
             return true
         end

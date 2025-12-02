@@ -1,7 +1,8 @@
 local card_atlases = {
 	'bananokers',
     'consumables',
-    'stickers'
+    'stickers',
+    'xmod_bananokers'
 }
 
 ---------------------

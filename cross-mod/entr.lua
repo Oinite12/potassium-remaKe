@@ -1,13 +1,54 @@
 -- CROSS-MOD for Entropy
--- Content includes: Expoglop (Atomikos compatibility)
+-- Content includes:
+	-- WhatSunn (Joker)
+	-- Expoglop (Scoring Calculation)
 
 if not (SMODS.Mods["Cryptid"] or {}).can_load then
 ------------------------------
+
+-----------
+-- JOKER
+-- Whatsunn
+-----------
+SMODS.Joker {
+	key = "whatsunn",
+	loc_vars = function (self, info_queue, card)
+		return {vars = {
+			card.ability.extra.eq_glop,
+			card.ability.extra.asc
+		}}
+	end,
+	config = {
+		extra = {
+			eq_glop = 1.5,
+			asc = 0.5
+		}
+	},
+
+	atlas = "xmod_bananokers",
+	pos = {x=0, y=0},
+
+	rarity = 1,
+	cost = 3,
+
+	calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+				eq_glop = card.ability.extra.eq_glop,
+                plus_asc = card.ability.extra.asc
+            }
+        end
+	end,
+}
 
 ----------------------
 -- SCORING CALCULATION
 -- Expoglop
 ----------------------
+-- This scoring calculation is needed for Atomikos compatibility,
+-- so as to not entirely void Glop when the Joker is in effect
+-- TODO: Add Exposfark
+-- TODO: poker hand info ui fix for expoglop
 SMODS.Scoring_Calculation {
     key = 'expoglop',
     parameters = {'mult', 'chips', 'kali_glop'},
@@ -65,5 +106,3 @@ SMODS.Scoring_Calculation {
 
 ------------------------------
 end
-
--- todo: poker hand info ui fix for expoglop
