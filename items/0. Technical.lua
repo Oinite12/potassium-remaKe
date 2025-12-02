@@ -87,7 +87,7 @@ SMODS.Scoring_Parameter {
         local key_effects = Potassium.key_effects[self.key]
         if key_effects and key_effects[key] then
             local effect_values = key_effects[key](self.current, amount)
-            if amount == effect_values.identity then return end
+            if effect_values.identity and amount == effect_values.identity then return end
 
             self:modify(effect_values.apply - self.current)
 
@@ -125,7 +125,7 @@ SMODS.Scoring_Parameter {
         local key_effects = Potassium.key_effects[self.key]
         if key_effects and key_effects[key] then
             local effect_values = key_effects[key](self.current, amount)
-            if amount == effect_values.identity then return end
+            if effect_values.identity and amount == effect_values.identity then return end
 
             self:modify(effect_values.apply - self.current)
 
