@@ -37,7 +37,9 @@ match_indent = true
 [patches.pattern]
 target = '''=[SMODS _ "src/utils.lua"]'''
 pattern = '''
-if effect[key] then
+if not SMODS.silent_calculation[key] then
+    percent = (percent or 0) + (percent_delta or 0.08)
+end
 '''
 position = "after"
 payload = '''
