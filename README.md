@@ -62,7 +62,6 @@ To do so, first make the global table `Potassium` existent*, then make the table
 
 In either table, add a key-value pair, with the key being the calculation key, and the value being a function of the following format:
 ```lua
-{
 function (current --[[NUMBER]], amount --[[NUMBER]])
   -- any additional code
   return {
@@ -73,7 +72,6 @@ function (current --[[NUMBER]], amount --[[NUMBER]])
     sound = STRING --[[optional; key of sound]]
   }
 end
-}
 ```
 where `current` is the current value of Glop or Sfark, and `amount` is the value given in a calculate function's return table (i.e. `return {glop = 1}`).
 
