@@ -90,7 +90,9 @@ SMODS.Scoring_Parameter {
             if amount == effect_values.identity then return end
 
             self:modify(effect_values.apply - self.current)
-            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
+
+            local status_text_target = effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus
+            card_eval_status_text(status_text_target, 'extra', nil, percent, nil, effect[key .. "_message"] or {
                 message = effect_values.message_key and localize{
                     type = 'variable',
                     key = effect_values.message_key,
@@ -126,12 +128,14 @@ SMODS.Scoring_Parameter {
             if amount == effect_values.identity then return end
 
             self:modify(effect_values.apply - self.current)
-            card_eval_status_text(scored_card, 'extra', nil, percent, nil, {
-                message = localize{
+
+            local status_text_target = effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus
+            card_eval_status_text(status_text_target, 'extra', nil, percent, nil, effect[key .. "_message"] or {
+                message = effect_values.message_key and localize{
                     type = 'variable',
                     key = effect_values.message_key,
                     vars = {effect_values.message_text}
-                },
+                } or effect_values.message_text,
                 colour = self.colour,
                 sound = effect_values.sound
             })

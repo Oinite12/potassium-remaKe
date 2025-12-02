@@ -44,7 +44,7 @@ SMODS.Joker {
 ```
 
 ### Calculation keys that cause Glop increase
-Glop increases by 0.01 per increase of chips/mult/glop. Other scoring parameters - or specifically *calculation keys* - can cause this increase if they are added to the following <u>set tables</u>:
+Glop increases by 0.01 after each increase of chips/mult/glop. Other scoring parameters - or specifically *calculation keys* - can cause this increase if they are added to the following <u>set tables</u>:
 - `Potassium.calc_keys.additive` (e.g. `chips`, `mult`)
 - `Potassium.calc_keys.multiplicative` (e.g. `xchips`, `xmult`)
 - `Potassium.calc_keys.exponential` (e.g. `echips`, `emult`)

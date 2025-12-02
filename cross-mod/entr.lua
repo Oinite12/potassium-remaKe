@@ -7,8 +7,17 @@ if not (SMODS.Mods["Cryptid"] or {}).can_load then
 ------------------------------
 
 -----------
+-- SOUND
+-- WhatsApp
+-----------
+SMODS.Sound{
+	key = "whatsapp",
+	path = "whatsapp.ogg"
+}
+
+-----------
 -- JOKER
--- Whatsunn
+-- WhatSunn
 -----------
 SMODS.Joker {
 	key = "whatsunn",
@@ -35,6 +44,12 @@ SMODS.Joker {
         if context.joker_main then
             return {
 				eq_glop = card.ability.extra.eq_glop,
+				eq_glop_message = {
+					message = "="..card.ability.extra.eq_glop,
+					colour = SMODS.Scoring_Parameters.kali_glop.colour,
+					sound = "kali_whatsapp",
+					pitch = 1
+				},
                 plus_asc = card.ability.extra.asc
             }
         end
