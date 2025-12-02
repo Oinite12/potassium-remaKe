@@ -19,7 +19,7 @@ This remake re-implements various Potassium features with modern Steamodded feat
 The intent is to ultimately make it easier to develop this mod and add new content that expands on the premise of bananas and glop.
 
 ## Technical documentation
-> [!NOTE] DISCLAIMER!
+> [!NOTE]
 > Documentation will spoil afforementioned mod secrets. Read at your own discretion!
 
 ### Contexts
