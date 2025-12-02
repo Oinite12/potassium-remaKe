@@ -50,6 +50,8 @@ The following calculation keys for glop are recognized by the mod:
 
 Sfark can be increased similarly and has a similar set of calculation keys to glop, however the scoring calculation needs to be set to Sfark for effects to occur.
 
+The message for all of these calculation keys can also be changed with the parameter `[calculation key]_message` (for example, `glop_message`).
+
 Furthermore, playing cards can hold permanent/bonus glop. To achieve this, change the value `card.ability.perma_glop` on a card. A Joker may achieve this on `context.individual` and by changing card to `context.other_card`. A sfark analogue does not exist yet (but feel free to suggest it if you need it).
 
 ### More Glop/Sfark calculation keys
