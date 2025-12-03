@@ -4,7 +4,7 @@
 	-- Expoglop (Scoring Calculation)
 
 if not (SMODS.Mods["Cryptid"] or {}).can_load then
-------------------------------
+---- START CAN-LOAD ----
 
 -----------
 -- SOUND
@@ -119,5 +119,37 @@ SMODS.Scoring_Calculation {
     end
 }
 
-------------------------------
+-------------------------------
+-- CALCULATION KEY ORGANIZATION
+-------------------------------
+-- Ascension Power increase now counts toward the +0.01 Glop increase
+for _,key in ipairs({
+	'asc', 'asc_mod', 'plus_asc', 'plusasc_mod'
+}) do
+	Potassium.calc_keys.additive[key] = true
+	Potassium.calc_keys.all[key] = true
+end
+
+for _,key in ipairs({
+	'x_asc'
+}) do
+	Potassium.calc_keys.multiplicative[key] = true
+	Potassium.calc_keys.all[key] = true
+end
+
+for _,key in ipairs({
+	'exp_asc', 'exp_asc_mod'
+}) do
+	Potassium.calc_keys.exponential[key] = true
+	Potassium.calc_keys.all[key] = true
+end
+
+for _,key in ipairs({
+	'hyper_asc', 'hyper_asc_mod', 'hyperasc', 'hyperasc_mod'
+}) do
+	Potassium.calc_keys.hyperoperative[key] = true
+	Potassium.calc_keys.all[key] = true
+end
+
+---- END CAN-LOAD ----
 end

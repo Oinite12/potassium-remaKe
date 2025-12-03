@@ -60,10 +60,6 @@ end
 Glop_f.load_directory("load_assets")
 Glop_f.load_directory("func")
 Glop_f.load_directory("items")
--- Cross-mod files (named with mod ID) only loaded if mod is loaded
-Glop_f.load_directory("cross-mod", function (file_name)
-	return (SMODS.Mods[file_name:gsub('%.lua$', '')] or {}).can_load
-end)
 
 -------------
 -- MOD OBJECT
@@ -231,6 +227,14 @@ for _, key in ipairs({
 	Potassium.calc_keys.hyperoperative[key] = true
 	Potassium.calc_keys.all[key] = true
 end
+
+--------------------
+-- CROSS-MOD LOADING
+--------------------
+-- Cross-mod files (named with mod ID) only loaded if mod is loaded
+Glop_f.load_directory("cross-mod", function (file_name)
+	return (SMODS.Mods[file_name:gsub('%.lua$', '')] or {}).can_load
+end)
 
 ----------
 -- CREDITS
