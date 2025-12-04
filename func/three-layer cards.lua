@@ -1,5 +1,5 @@
 -- Yoinked from Potassium, which yoinked from Crypitd
--- Will clean up later (or feel free to do so)
+-- And then I cleaned it up >:D -Oinite
 
 if not (SMODS.Mods["Cryptid"] or {}).can_load then
 ------------------------------
