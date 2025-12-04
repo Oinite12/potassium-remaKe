@@ -98,7 +98,7 @@ pattern = '-- TARGET: main scoring on held cards'
 position = "after"
 match_indent = true
 payload = '''
-Glop_f.additional_played_card_effects(card, ret)
+Glop_f.additional_held_card_effects(card, ret)
 '''
 
 # -- BANANA BLINDS --

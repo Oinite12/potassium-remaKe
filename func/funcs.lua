@@ -183,6 +183,9 @@ Glop_f.additional_played_card_effects = function (card, ret)
         local value = card.ability[ability_key] or 0
         if value and value ~= 0 then
             ret.playing_card[calculation_key] = value + base
+            if ability_key == 'perma_glop' then
+                sendWarnMessage("[POTASSIUM] card.ability.perma_glop is depreciated, please use card.ability.kali_perma_glop instead.")
+            end
         end
     end
 end
