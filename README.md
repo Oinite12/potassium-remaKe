@@ -52,7 +52,13 @@ Sfark can be increased similarly and has a similar set of calculation keys to gl
 
 The message for all of these calculation keys can also be changed with the parameter `[calculation key]_message` (for example, `glop_message`).
 
-Furthermore, playing cards can hold permanent/bonus glop. To achieve this, change the value `card.ability.perma_glop` on a card. A Joker may achieve this on `context.individual` and by changing card to `context.other_card`. A sfark analogue does not exist yet (but feel free to suggest it if you need it).
+Playing cards can also hold the following permanent bonuses in their ability table:
+- `kali_perma_glop`
+- `kali_perma_x_glop`
+- `kali_perma_exp_glop`
+- `kali_perma_sfark`
+- `kali_perma_x_sfark`
+- `kali_perma_exp_sfark`
 
 ### More Glop/Sfark calculation keys
 By adding to the tables `Potassium.key_effects.kali_glop` and `Potassium.key_effects.kali_sfark`, one may very easily add more calculation keys that modify glop or sfark in an atypical manner.

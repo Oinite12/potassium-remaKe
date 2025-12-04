@@ -853,7 +853,7 @@ SMODS.Joker {
 
     calculate = function (self, card, context)
         if context.individual and context.cardarea == G.play then
-            context.other_card.ability.perma_glop = (context.other_card.ability.perma_glop or 0) + card.ability.extra.glop
+            context.other_card.ability.kali_perma_glop = (context.other_card.ability.kali_perma_glop or 0) + card.ability.extra.glop
             return {
                 message = localize("k_upgrade_ex"),
                 colour = G.C.GLOP,

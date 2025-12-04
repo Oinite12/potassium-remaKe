@@ -49,17 +49,19 @@ end
 '''
 match_indent = true
 
-# -- CARD GLOP --
+# -- CARD BONUSES --
 
 # function Card:set_ability
-# Set defaults for permanent card bonuses (Card perma_glop
+# Set defaults for permanent card bonuses
 [[patches]]
 [patches.pattern]
 target = "card.lua"
-pattern = "perma_bonus = self.ability and self.ability.perma_bonus or 0,"
-position = "after"
+pattern = '''
+self.ability = self.ability or {}
+'''
+position = "before"
 payload = '''
-perma_glop = self.ability and self.ability.perma_glop or 0,
+Glop_f.add_ability_values(self, new_ability)
 '''
 match_indent = true
 
@@ -68,14 +70,15 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "card.lua"
-pattern = "bonus_chips = bonus_chips ~= 0 and bonus_chips or nil,"
-position = "after"
+pattern = "elseif self.ability.set == 'Joker' then -- all remaining jokers"
+position = "before"
 payload = '''
-bonus_glop = self.ability.perma_glop ~= 0 and (self.ability.perma_glop) or nil,'''
+Glop_f.add_bonus_vars(self, loc_vars)
+'''
 match_indent = true
 
 # function eval_card
-# Make card perma glop score
+# Calculate card bonuses for played cards
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
@@ -83,10 +86,19 @@ pattern = '-- TARGET: main scoring on played cards'
 position = "after"
 match_indent = true
 payload = '''
-local glop = card:get_glop()
-if glop > 0 then
-    ret.playing_card.glop = glop
-end
+Glop_f.additional_played_card_effects(card, ret)
+'''
+
+# function eval_card
+# Calculate card bonuses for held cards
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '-- TARGET: main scoring on held cards'
+position = "after"
+match_indent = true
+payload = '''
+Glop_f.additional_played_card_effects(card, ret)
 '''
 
 # -- BANANA BLINDS --

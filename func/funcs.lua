@@ -2,7 +2,8 @@
 
 -- 1. METAGLOP
 -- 2. LEVEL UP HAND ANIMATION
--- 3. MISCELLANEOUS
+-- 3. CARD BONUSES
+-- 4. MISCELLANEOUS
 
 
 
@@ -126,6 +127,84 @@ function Glop_f.end_level_up_hand_animation(args)
         end
     end
     update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, post_hand_text)
+end
+
+
+
+----------------------
+---- CARD BONUSES ----
+----------------------
+
+-- Sets additional ability values during Card:set_ability.
+---@param card Card
+---@param new_ability_table table
+---@return nil
+Glop_f.add_ability_values = function(card, new_ability_table)
+    for _,bonus_def in pairs(Potassium.card_bonuses) do
+        local ability_key = bonus_def.ability_key
+        new_ability_table[ability_key] = card.ability and card.ability[ability_key] or 0
+
+        local held_ability_key = bonus_def.held_ability_key
+        if held_ability_key then
+            new_ability_table[held_ability_key] = card.ability and card.ability[held_ability_key] or 0
+        end
+    end
+end
+
+-- Sets localization variables for additional bonus values during Card:generate_UIBox_ability_table.
+---@param card Card
+---@param loc_vars_table table
+---@return nil
+Glop_f.add_bonus_vars = function(card, loc_vars_table)
+    for _,bonus_def in ipairs(Potassium.card_bonuses) do
+        local ability_key = bonus_def.ability_key
+        local vars_key = bonus_def.vars_key
+        loc_vars_table[vars_key] = card.ability[ability_key] ~= 0 and card.ability[ability_key] or nil
+
+        local held_ability_key = bonus_def.held_ability_key
+        local held_vars_key = bonus_def.held_vars_key
+        if held_ability_key and held_vars_key then
+            loc_vars_table[held_vars_key] = card.ability[held_ability_key] ~= 0 and card.ability[held_ability_key] or nil
+        end
+    end
+end
+
+-- Sets calculation keys for additional bonus values for PLAYED cards.
+---@param card Card
+---@param ret table
+---@return nil
+Glop_f.additional_played_card_effects = function (card, ret)
+    if card.debuff then return end
+    for _,bonus_def in ipairs(Potassium.card_bonuses) do
+        local ability_key = bonus_def.ability_key
+        local calculation_key = bonus_def.calculation_key
+        local base = bonus_def.base
+
+        local value = card.ability[ability_key] or 0
+        if value and value ~= 0 then
+            ret.playing_card[calculation_key] = value + base
+        end
+    end
+end
+
+-- Sets calculation keys for additional bonus values for HELD cards.
+---@param card Card
+---@param ret table
+---@return nil
+Glop_f.additional_held_card_effects = function (card, ret)
+    if card.debuff then return end
+    for _,bonus_def in ipairs(Potassium.card_bonuses) do
+        local held_ability_key = bonus_def.held_ability_key
+        if not held_ability_key then return end
+
+        local calculation_key = bonus_def.calculation_key
+        local base = bonus_def.base
+
+        local value = card.ability[held_ability_key] or 0
+        if value and value ~= 0 then
+            ret.playing_card[calculation_key] = value + base
+        end
+    end
 end
 
 
