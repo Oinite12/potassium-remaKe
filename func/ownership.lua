@@ -89,7 +89,7 @@ SMODS.Joker:take_ownership('cavendish', {
     no_pool_flag = 'cavendish_extinct',
     calculate = function (self, card, context)
         if context.joker_main then
-            return {mult = card.ability.extra.Xmult}
+            return {xmult = card.ability.extra.Xmult}
         end
 
         if (
