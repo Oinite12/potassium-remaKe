@@ -40,23 +40,33 @@ function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, h
     if card and card.ability then
         local desc_nodes = full_UI_table.main
         for _,bonus_def in ipairs(Potassium.card_bonuses) do
-            local base = bonus_def.base
+            local ability_keys = bonus_def.ability_keys
+            local loc_keys     = bonus_def.loc_keys
+            local base         = bonus_def.base
 
-            local ability_key = bonus_def.ability_key
-            local loc_key = bonus_def.loc_key
+            local perma_key      = ability_keys.perma
+            local vars_key       = loc_keys.vars_key
+            local loc_key        = loc_keys.loc_key
+            local perma_held_key = ability_keys.perma_held
+            local held_vars_key  = loc_keys.held_vars_key
+            local held_loc_key   = loc_keys.held_loc_key
 
-            local bonus_value = card.ability[ability_key]
-            if bonus_value and bonus_value ~= 0 then
-                localize{type = 'other', key = loc_key, nodes = desc_nodes, vars = {bonus_value + base}}
+            if vars_key and loc_key then
+                local value = (
+                    (specific_vars and specific_vars[vars_key])
+                    or (card and card.ability and card.ability[perma_key] and (card.ability[perma_key] + base))
+                )
+                if value and value ~= base then
+                    localize{type = 'other', key = loc_key, nodes = desc_nodes, vars = {value}}
+                end
             end
-
-            local held_ability_key = bonus_def.held_ability_key
-            local held_loc_key = bonus_def.held_loc_key
-
-            if held_ability_key and held_loc_key then
-                local held_bonus_value = card.ability[held_ability_key]
-                if held_bonus_value and held_bonus_value ~= 0 then
-                    localize{type = 'other', key = held_loc_key, nodes = desc_nodes, vars = {held_bonus_value + base}}
+            if held_vars_key and held_loc_key then
+                local value = (
+                    (specific_vars and specific_vars[held_vars_key])
+                    or (card and card.ability and card.ability[perma_held_key] and (card.ability[perma_held_key] + base))
+                )
+                if value and value ~= base then
+                    localize{type = 'other', key = held_loc_key, nodes = desc_nodes, vars = {value}}
                 end
             end
         end

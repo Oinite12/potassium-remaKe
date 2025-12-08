@@ -277,40 +277,40 @@ return {
 			}
 		},
         Other = {
-			card_extra_glop = {
+			kali_card_extra_glop = {
 				text = {"{C:glop}+#1#{} Glop"}
 			},
-			card_extra_x_glop = {
+			kali_card_extra_x_glop = {
 				text = {"{X:glop,C:white}X#1# {} Glop"}
 			},
-			card_extra_exp_glop = {
+			kali_card_extra_exp_glop = {
 				text = {"{X:glop,C:white}^#1# {} Glop"}
 			},
-			card_extra_h_glop = {
+			kali_card_extra_h_glop = {
 				text = {"{C:glop}+#1#{} Glop when held"}
 			},
-			card_extra_h_x_glop = {
+			kali_card_extra_h_x_glop = {
 				text = {"{X:glop,C:white}X#1# {} Glop when held"}
 			},
-			card_extra_h_exp_glop = {
+			kali_card_extra_h_exp_glop = {
 				text = {"{X:glop,C:white}^#1# {} Glop when held"}
 			},
-			card_extra_sfark = {
+			kali_card_extra_sfark = {
 				text = {"{C:sfark}+#1#{} Sfark"}
 			},
-			card_extra_x_sfark = {
+			kali_card_extra_x_sfark = {
 				text = {"{X:sfark,C:white}X#1# {} Sfark"}
 			},
-			card_extra_exp_sfark = {
+			kali_card_extra_exp_sfark = {
 				text = {"{X:sfark,C:white}^#1# {} Sfark"}
 			},
-			card_extra_h_sfark = {
+			kali_card_extra_h_sfark = {
 				text = {"{C:sfark}+#1#{} Sfark when held"}
 			},
-			card_extra_h_x_sfark = {
+			kali_card_extra_h_x_sfark = {
 				text = {"{X:sfark,C:white}X#1# {} Sfark when held"}
 			},
-			card_extra_h_exp_sfark = {
+			kali_card_extra_h_exp_sfark = {
 				text = {"{X:sfark,C:white}^#1# {} Sfark when held"}
 			},
 			kali_stickernana = {

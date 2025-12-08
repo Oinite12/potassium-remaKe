@@ -61,7 +61,7 @@ self.ability = self.ability or {}
 '''
 position = "before"
 payload = '''
-Glop_f.add_ability_values(self, new_ability)
+Glop_f.add_ability_values(self, center, new_ability)
 '''
 match_indent = true
 

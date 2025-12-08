@@ -137,34 +137,55 @@ end
 
 -- Sets additional ability values during Card:set_ability.
 ---@param card Card
----@param new_ability_table table
+---@param center table
+---@param ability table
 ---@return nil
-Glop_f.add_ability_values = function(card, new_ability_table)
+Glop_f.add_ability_values = function(card, center, ability)
     for _,bonus_def in pairs(Potassium.card_bonuses) do
-        local ability_key = bonus_def.ability_key
-        new_ability_table[ability_key] = card.ability and card.ability[ability_key] or 0
+        local ability_keys = bonus_def.ability_keys
+        local base         = bonus_def.base
 
-        local held_ability_key = bonus_def.held_ability_key
-        if held_ability_key then
-            new_ability_table[held_ability_key] = card.ability and card.ability[held_ability_key] or 0
+        local nocopy_key      = ability_keys.nocopy
+        local nocopy_held_key = ability_keys.nocopy_held
+        local perma_key       = ability_keys.perma
+        local perma_held_key  = ability_keys.perma_held
+
+        if nocopy_key then
+            ability[nocopy_key] = center.config[nocopy_key] or base
+        end
+        if nocopy_held_key then
+            ability[nocopy_held_key] = center.config[nocopy_held_key] or base
+        end
+        if perma_key then
+            ability[perma_key] = card.ability and card.ability[perma_key] or 0
+        end
+        if perma_held_key then
+            ability[perma_held_key] = card.ability and card.ability[perma_held_key] or 0
         end
     end
 end
 
 -- Sets localization variables for additional bonus values during Card:generate_UIBox_ability_table.
 ---@param card Card
----@param loc_vars_table table
+---@param loc_vars table
 ---@return nil
-Glop_f.add_bonus_vars = function(card, loc_vars_table)
+Glop_f.add_bonus_vars = function(card, loc_vars)
     for _,bonus_def in ipairs(Potassium.card_bonuses) do
-        local ability_key = bonus_def.ability_key
-        local vars_key = bonus_def.vars_key
-        loc_vars_table[vars_key] = card.ability[ability_key] ~= 0 and card.ability[ability_key] or nil
+        local ability_keys = bonus_def.ability_keys
+        local loc_keys     = bonus_def.loc_keys
+        local base         = bonus_def.base
 
-        local held_ability_key = bonus_def.held_ability_key
-        local held_vars_key = bonus_def.held_vars_key
-        if held_ability_key and held_vars_key then
-            loc_vars_table[held_vars_key] = card.ability[held_ability_key] ~= 0 and card.ability[held_ability_key] or nil
+        local perma_key      = ability_keys.perma
+        local perma_held_key = ability_keys.perma_held
+
+        local vars_key      = loc_keys.vars_key
+        local held_vars_key = loc_keys.held_vars_key
+
+        if perma_key and vars_key then
+            loc_vars[vars_key] = card.ability[perma_key] ~= 0 and (card.ability[perma_key] + base) or nil
+        end
+        if perma_held_key and held_vars_key then
+            loc_vars[held_vars_key] = card.ability[perma_held_key] ~= 0 and (card.ability[perma_held_key] + base) or nil
         end
     end
 end
@@ -176,14 +197,17 @@ end
 Glop_f.additional_played_card_effects = function (card, ret)
     if card.debuff then return end
     for _,bonus_def in ipairs(Potassium.card_bonuses) do
-        local ability_key = bonus_def.ability_key
-        local calculation_key = bonus_def.calculation_key
-        local base = bonus_def.base
+        local ability_keys     = bonus_def.ability_keys
+        local calculation_key  = bonus_def.calculation_key
+        local get_bonus        = bonus_def.get_bonus
 
-        local value = card.ability[ability_key] or 0
+        local nocopy_key = ability_keys.nocopy
+        local perma_key  = ability_keys.perma
+
+        local value = get_bonus(card.ability[nocopy_key], not card.ability.extra_enhancement and card.ability[perma_key])
         if value and value ~= 0 then
-            ret.playing_card[calculation_key] = value + base
-            if ability_key == 'perma_glop' then
+            ret.playing_card[calculation_key] = value
+            if perma_key == 'perma_glop' then
                 sendWarnMessage("[POTASSIUM] card.ability.perma_glop is depreciated, please use card.ability.kali_perma_glop instead.")
             end
         end
@@ -197,15 +221,16 @@ end
 Glop_f.additional_held_card_effects = function (card, ret)
     if card.debuff then return end
     for _,bonus_def in ipairs(Potassium.card_bonuses) do
-        local held_ability_key = bonus_def.held_ability_key
-        if not held_ability_key then return end
+        local ability_keys     = bonus_def.ability_keys
+        local calculation_key  = bonus_def.calculation_key
+        local get_bonus        = bonus_def.get_bonus
 
-        local calculation_key = bonus_def.calculation_key
-        local base = bonus_def.base
+        local nocopy_held_key  = ability_keys.nocopy_held
+        local perma_held_key = ability_keys.perma_held
 
-        local value = card.ability[held_ability_key] or 0
+        local value = get_bonus(card.ability[nocopy_held_key], not card.ability.extra_enhancement and card.ability[perma_held_key])
         if value and value ~= 0 then
-            ret.playing_card[calculation_key] = value + base
+            ret.playing_card[calculation_key] = value
         end
     end
 end
