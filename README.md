@@ -11,7 +11,7 @@ A remake of Potassium, a Balatro mod that has all the bananas and glop you could
 
 and more to come!
 
-Technical documentation can be found at the [repository wiki](./wiki).
+Technical documentation can be found at the [repository wiki](//github.com/Oinite12/potassium-remaKe/wiki).
 
 ## Motive for remaking
 Potassium was released on April Fool's Day 2025; since then, a lot of breaking changes have been implemented in Steamodded that prevent the original mod from running at all. The original Potassium mod also featured several overriding changes that makes the mod less appealing to play with other mods.
