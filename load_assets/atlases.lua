@@ -2,7 +2,8 @@ local card_atlases = {
 	'bananokers',
     'consumables',
     'stickers',
-    'xmod_bananokers'
+    'xmod_bananokers',
+    'placeholders'
 }
 
 ---------------------
@@ -16,6 +17,20 @@ for _, key in ipairs(card_atlases) do
 		py = 95
 	}
 end
+
+---------------
+-- Placeholders
+---------------
+Potassium.placeholder_sprites = {
+    j_common    = {x=0,y=0},
+    j_uncommon  = {x=1,y=0},
+    j_rare      = {x=2,y=0},
+    j_legendary = {x=3,y=0},
+
+    c_tarot     = {x=0,y=1},
+    c_planet    = {x=1,y=1},
+    c_spectral  = {x=2,y=1},
+}
 
 -------
 -- Tags
