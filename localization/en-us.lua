@@ -43,6 +43,31 @@ return {
 					"{C:attention}Queen{}, {C:attention}Jack{}, {C:attention}10{}, and {C:attention}2",
 				}
 			},
+			j_kali_lime = {
+				name = "Lime",
+				text = {
+					"{C:glop}+#1# {}Glop",
+					"{C:mult}#2# {}Mult",
+					"{C:glop}#3# {}Glop per hand"
+				}
+			},
+			j_kali_mystery_adhesive = {
+				name = "Mystery Adhesive",
+				text = {
+					"Played cards with a {C:attention}seal",
+					"give {C:glop}+#1# {}Glop",
+				}
+			},
+			j_kali_sludge_printer = {
+				name = "Sludge Printer",
+				text = {
+					"Create {C:perishable}Perishable {C:glop}Glop",
+					"copies of played cards",
+					"on {C:attention}final hand {}of round",
+					"{C:red,E:2}Self destruct {}after",
+					"copying {C:attention}#1# {C:inactive}(#2#) {}cards"
+				}
+			},
 
 			j_kali_begg = {
 				name = "Begg",

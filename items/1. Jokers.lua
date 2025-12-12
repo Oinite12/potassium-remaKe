@@ -14,6 +14,8 @@ local function simple_scale(card, target, scalar, colour, message_key)
 	})
 end
 
+local phd = Potassium.placeholder_sprites
+
 -------------
 -- Plantation
 -------------
@@ -219,6 +221,148 @@ SMODS.Joker {
                 glop = card.ability.extra.glop,
 			}
 		end
+    end,
+}
+
+-------
+-- Lime
+-------
+SMODS.Joker {
+    key = "lime",
+    loc_vars = function (self, info_queue, card)
+        return {vars = {
+            card.ability.extra.glop,
+            card.ability.extra.mult,
+            card.ability.extra.glop_mod,
+        }}
+    end,
+    config = {
+        extra = {
+            glop = 1,
+            glop_mod = -0.1,
+            mult = -1
+        }
+    },
+
+    atlas = "placeholders",
+    pos = phd.j_uncommon,
+
+    rarity = 2,
+    cost = 5,
+
+    calculate = function (self, card, context)
+        if context.after and not context.blueprint then
+            if card.ability.extra.glop - card.ability.extra.glop_mod <= 0 then
+                SMODS.destroy_cards(card, nil, nil, true)
+                return {
+                    message = localize('k_eaten_ex'),
+                    colour = G.C.GLOP
+                }
+            else
+                simple_scale(card, "glop", "glop_mod", G.C.GLOP, "a_chips_minus")
+            end
+        end
+        if context.joker_main then
+            return {
+                glop = card.ability.extra.glop,
+                mult = card.ability.extra.mult,
+            }
+        end
+    end,
+}
+
+-------------------
+-- Mystery Adhesive
+-------------------
+SMODS.Joker {
+    key = "mystery_adhesive",
+    loc_vars = function (self, info_queue, card)
+        return {vars = {
+            card.ability.extra.glop
+        }}
+    end,
+    config = {
+        extra = {
+            glop = 0.16
+        }
+    },
+
+    atlas = "placeholders",
+    pos = phd.j_uncommon,
+
+    rarity = 2,
+    cost = 6,
+
+    calculate = function (self, card, context)
+        if (
+            context.individual
+            and context.cardarea == G.play
+            and context.other_card:get_seal()
+        ) then
+            return {
+                glop = card.ability.extra.glop
+            }
+        end
+    end,
+}
+
+-----------------
+-- Sludge Printer
+-----------------
+SMODS.Joker {
+    key = "sludge_printer",
+    loc_vars = function (self, info_queue, card)
+        table.insert(info_queue, { key = "eternal", set = "Other" })
+        table.insert(info_queue, G.P_CENTERS.e_kali_glop)
+        return {vars = {
+            card.ability.extra.max_copy,
+            card.ability.extra.copy_count,
+        }}
+    end,
+    config = {
+        extra = {
+            max_copy = 5,
+            copy_count = 0
+        }
+    },
+
+    atlas = "placeholders",
+    pos = phd.j_uncommon,
+
+    rarity = 2,
+    cost = 6,
+
+    calculate = function (self, card, context)
+        if (
+            context.individual
+            and context.cardarea == G.play
+            and not context.end_of_round
+            and G.GAME.current_round.hands_left == 0
+        ) then
+            -- i took this from vremade im not sure why it's all this
+            G.playing_card = (G.playing_card or 0) + 1
+            local card_copy = copy_card(context.other_card, nil, nil, G.playing_card)
+            card_copy:add_to_deck()
+            G.deck.config.card_limit = G.deck.config.card_limit + 1
+            table.insert(G.playing_cards, card_copy)
+            G.hand:emplace(card_copy)
+            card_copy.states.visible = nil
+
+            Glop_f.add_simple_event(nil, nil, function ()
+                card_copy:start_materialize()
+                card_copy:set_edition('e_kali_glop', true)
+                card_copy:add_sticker('perishable', true)
+            end)
+            return {
+                message = localize('k_copied_ex'),
+                colour = G.C.GLOP,
+                func = function() -- This is for timing purposes, it runs after the message
+                    Glop_f.add_simple_event(nil, nil, function ()
+                        SMODS.calculate_context({ playing_card_added = true, cards = { card_copy } })
+                    end)
+                end
+            }
+        end
     end,
 }
 
