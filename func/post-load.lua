@@ -20,6 +20,7 @@ function Game:splash_screen()
             and center.rarity == 4
             and center.key ~= "j_kali_glopmother"
             and center.key ~= "j_kali_glopku"
+            and not center.kali_exclude_glop_evolution
         ) then
             Potassium.glop_evolutions[center.key] = "j_kali_glopmother"
         end
