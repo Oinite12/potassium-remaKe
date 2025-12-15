@@ -1,0 +1,32 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# lovely/cross-mod Cryptid.toml
+# Changes for Cryptid
+
+# ----
+
+# In Cryptid:
+# function Cryptid.manipulate_value
+# Prevent bonus (x/e)(glop/sfark) from being changed (by Glitched edition)
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Cryptid "lib/misprintize.lua"]'
+pattern = '''
+to_big(num) ~= to_big(0) and (to_big(num) ~= to_big(1) or (name ~= "x_chips" and name ~= "x_mult"))
+'''
+position = "after"
+payload = '''
+-- The following added by RE:Potassium --
+and (to_big(num) ~= to_big(1) or not ({
+    kali_x_glop = true,
+    kali_x_sfark = true,
+    kali_exp_glop = true,
+    kali_exp_sfark = true
+})[name])
+-- END RE:POTASSIUM PATCH --
+'''
+match_indent = true
+
