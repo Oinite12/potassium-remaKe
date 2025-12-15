@@ -3,17 +3,34 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
+# lovely/lovely.toml
+# Base mod patches
+
+# 1. MISCELLANEOUS
+# 2. CARD BONUSES
+# 3. BANANA BLINDS
+
+
+
+# ------------- #
+# MISCELLANEOUS #
+# ------------- #
+
 # function G.FUNCS.evaluate_play
 # Tag calculations pre-scoring
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
-pattern = '''mult, hand_chips = mod_mult(mult), mod_chips(hand_chips)'''
+pattern = '''
+mult, hand_chips = mod_mult(mult), mod_chips(hand_chips)
+'''
 position = "after"
-payload = '''check_and_set_high_score('best_glop', glop)
+payload = '''
+check_and_set_high_score('best_glop', glop)
 for i = 1, #G.GAME.tags do
     G.GAME.tags[i]:apply_to_run({type = 'scoring'})
-end'''
+end
+'''
 match_indent = true
 
 # function update_hand_text
@@ -21,7 +38,9 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
-pattern = '''if delta < 0 then delta = ''..delta; col = G.C.RED'''
+pattern = '''
+if delta < 0 then delta = ''..delta; col = G.C.RED
+'''
 position = "before"
 payload = '''
 if type(delta) == 'number' then
@@ -49,7 +68,11 @@ end
 '''
 match_indent = true
 
-# -- CARD BONUSES --
+
+
+# ------------ #
+# CARD BONUSES #
+# ------------ #
 
 # function Card:set_ability
 # Set defaults for permanent card bonuses
@@ -70,7 +93,9 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "card.lua"
-pattern = "elseif self.ability.set == 'Joker' then -- all remaining jokers"
+pattern = '''
+elseif self.ability.set == 'Joker' then -- all remaining jokers
+'''
 position = "before"
 payload = '''
 Glop_f.add_bonus_vars(self, loc_vars)
@@ -82,7 +107,9 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
-pattern = '-- TARGET: main scoring on played cards'
+pattern = '''
+-- TARGET: main scoring on played cards
+'''
 position = "after"
 match_indent = true
 payload = '''
@@ -94,14 +121,20 @@ Glop_f.additional_played_card_effects(card, ret)
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
-pattern = '-- TARGET: main scoring on held cards'
+pattern = '''
+-- TARGET: main scoring on held cards
+'''
 position = "after"
 match_indent = true
 payload = '''
 Glop_f.additional_held_card_effects(card, ret)
 '''
 
-# -- BANANA BLINDS --
+
+
+# ------------- #
+# BANANA BLINDS #
+# ------------- #
 
 # function create_UIBox_your_collection_blinds
 # Banana blinds are sorted later
