@@ -45,6 +45,14 @@ local function generate_loc_keys(mod_prefix, operator)
 	}
 end
 
+local function additive(nocopy, perma)
+	return (nocopy or 0) + (perma or 0)
+end
+
+local function multiplicative(nocopy, perma)
+	return SMODS.multiplicative_stacking(nocopy or 1, perma or 0)
+end
+
 ----
 
 Potassium.card_bonuses = Potassium.card_bonuses or {}
@@ -73,9 +81,7 @@ table.insert(Potassium.card_bonuses, {
 
 	ability_keys = generate_ability_keys('kali', 'glop'),
 	loc_keys = generate_loc_keys('kali', 'glop'),
-	get_bonus = function(nocopy, perma)
-		return (nocopy or 0) + (perma or 0)
-	end
+	get_bonus = additive
 })
 
 -- Multiplicative Glop
@@ -85,9 +91,7 @@ table.insert(Potassium.card_bonuses, {
 
 	ability_keys = generate_ability_keys('kali', 'x_glop'),
 	loc_keys = generate_loc_keys('kali', 'x_glop'),
-	get_bonus = function(nocopy, perma)
-		return SMODS.multiplicative_stacking(nocopy or 1, perma or 0)
-	end
+	get_bonus = multiplicative
 })
 
 -- Exponential Glop
@@ -97,12 +101,10 @@ table.insert(Potassium.card_bonuses, {
 
 	ability_keys = generate_ability_keys('kali', 'exp_glop'),
 	loc_keys = generate_loc_keys('kali', 'exp_glop'),
-	get_bonus = function(nocopy, perma)
-		-- We can use mult-stack since (x^y)^z = x^(y*z)
-		-- (We're working with y and z here and are trying to find a given x^a)
-		-- (for context, mult-stacking is used in x_glop for (x*y)*z = x*(y*z))
-		return SMODS.multiplicative_stacking(nocopy or 1, perma or 0)
-	end
+	-- We can use mult-stack since (x^y)^z = x^(y*z)
+	-- (We're working with y and z here and are trying to find a given x^a)
+	-- (for context, mult-stacking is used in x_glop for (x*y)*z = x*(y*z))
+	get_bonus = multiplicative
 })
 
 -- Additive Sfark
@@ -112,9 +114,7 @@ table.insert(Potassium.card_bonuses, {
 
 	ability_keys = generate_ability_keys('kali', 'sfark'),
 	loc_keys = generate_loc_keys('kali', 'sfark'),
-	get_bonus = function(nocopy, perma)
-		return (nocopy or 0) + (perma or 0)
-	end
+	get_bonus = additive
 })
 
 -- Multiplicative Sfark
@@ -124,9 +124,7 @@ table.insert(Potassium.card_bonuses, {
 
 	ability_keys = generate_ability_keys('kali', 'x_sfark'),
 	loc_keys = generate_loc_keys('kali', 'x_sfark'),
-	get_bonus = function(nocopy, perma)
-		return SMODS.multiplicative_stacking(nocopy or 1, perma or 0)
-	end
+	get_bonus = multiplicative
 })
 
 -- Exponential Sfark
@@ -136,8 +134,6 @@ table.insert(Potassium.card_bonuses, {
 
 	ability_keys = generate_ability_keys('kali', 'exp_sfark'),
 	loc_keys = generate_loc_keys('kali', 'exp_sfark'),
-	get_bonus = function(nocopy, perma)
-		-- See Exponential Glop
-		return SMODS.multiplicative_stacking(nocopy or 1, perma or 0)
-	end
+	-- See Exponential Glop for explanation on use of this func
+	get_bonus = multiplicative
 })
