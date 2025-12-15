@@ -1,6 +1,10 @@
--- Anything in the following event will only run after the game finishes loading
+-- Anything in the following hook will only run after the game finishes loading all mods
 
-Glop_f.add_simple_event(nil, nil, function ()
+local game_splash_hook = Game.splash_screen
+function Game:splash_screen()
+
+
+
     -- Set glop values for each hand, if not defined
     local glop_values_per_hand = SMODS.Scoring_Parameters.kali_glop.hands --[[@as table]]
     for hand_name in pairs(SMODS.PokerHands) do
@@ -35,7 +39,7 @@ Glop_f.add_simple_event(nil, nil, function ()
     for _,key in ipairs(SMODS.Scoring_Parameters["kali_sfark"].calculation_keys) do
         sfark_calc_keys_already_added[key] = true
     end
-    for key in pairs(Potassium.key_effects.kali_sfark) do  if not sfark_calc_keys_already_added[key] then
+    for key in pairs(Potassium.key_effects.kali_sfark) do if not sfark_calc_keys_already_added[key] then
         table.insert(SMODS.scoring_parameter_keys, key)
     end end
 
@@ -48,4 +52,8 @@ Glop_f.add_simple_event(nil, nil, function ()
             Potassium.card_bonus_ability_keys[key] = bonus_def
         end
     end
-end)
+
+
+
+    game_splash_hook(self)
+end
