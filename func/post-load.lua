@@ -38,4 +38,14 @@ Glop_f.add_simple_event(nil, nil, function ()
     for key in pairs(Potassium.key_effects.kali_sfark) do  if not sfark_calc_keys_already_added[key] then
         table.insert(SMODS.scoring_parameter_keys, key)
     end end
+
+    -- Create table for card bonus ability keys
+    -- This is a non-ordered list; use Potassium.card_bonuses for an ordered list
+    Potassium.card_bonus_ability_keys = {}
+    for _,bonus_def in pairs(Potassium.card_bonuses) do
+        local ability_keys = bonus_def.ability_keys
+        for _,key in pairs(ability_keys) do
+            Potassium.card_bonus_ability_keys[key] = bonus_def
+        end
+    end
 end)

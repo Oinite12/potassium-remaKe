@@ -19,13 +19,8 @@ to_big(num) ~= to_big(0) and (to_big(num) ~= to_big(1) or (name ~= "x_chips" and
 '''
 position = "after"
 payload = '''
--- The following added by RE:Potassium --
-and (to_big(num) ~= to_big(1) or not ({
-    kali_x_glop = true,
-    kali_x_sfark = true,
-    kali_exp_glop = true,
-    kali_exp_sfark = true
-})[name])
+-- The following line added by RE:Potassium --
+and Glop_f.do_multiplicative_manipulate(num, name)
 -- END RE:POTASSIUM PATCH --
 '''
 match_indent = true
