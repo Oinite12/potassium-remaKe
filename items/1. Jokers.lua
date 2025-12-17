@@ -244,8 +244,8 @@ SMODS.Joker {
         }
     },
 
-    atlas = "placeholders",
-    pos = phd.j_uncommon,
+    atlas = "bananokers",
+    pos = {x=5, y=2},
 
     rarity = 2,
     cost = 5,
