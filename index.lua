@@ -3,7 +3,7 @@
 
 -- Points of interest:
 	-- /cross-mod   - Code for features that only activate when the corresponding mod is enabled.
-	-- /data        - Data that is used across the entire mod, and is designed to be as easily expandible as possible.
+	-- /data        - Data used across the entire mod, and is designed to be as easily expandible as possible.
 	-- /func        - Largely technical code that is usually not based on specific content.
 	-- /items       - The code for the mod's content itself, including cards, card modifiers, blinds, and stakes.
 	-- /load-assets - Allows assets to be defined quickly and easily.
